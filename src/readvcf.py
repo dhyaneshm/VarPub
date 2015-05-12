@@ -41,11 +41,17 @@ def main(argv):
         current_chr = avcf[x][0]
         current_pos = avcf[x][1]
         current_info = avcf[x][7]
-        info = current_info.split("ANN=")
-        ann = info[1].split("|")
+        info_vep = current_info.split("CSQ=")
+        info_snpeff = current_info.split("ANN=")
+
+        csq = info_vep[1].split("|")
+        current_exon = csq[26]
+
+        ann = info_snpeff[1].split("|")
         current_gene_name = ann[3]
         current_gene2 = ann[4]
-        print current_chr, current_pos, ann[1], current_gene_name
+        out_str = [current_chr, current_pos, ann[1], current_gene_name, current_exon]
+        print "\t".join(out_str)
 
     print len(avcf)
 
