@@ -33,7 +33,22 @@ def main(argv):
         print "Starting ..."
 
     avcf = pybedtools.BedTool(args.vcf)
-    print avcf[0][7]
+    current_info = avcf[0][7]
+    info = current_info.split("ANN=")
+    ann = info[1].split("|")
+
+    for x in xrange(0, len(avcf)):
+        current_chr = avcf[x][0]
+        current_pos = avcf[x][1]
+        current_info = avcf[x][7]
+        info = current_info.split("ANN=")
+        ann = info[1].split("|")
+        current_gene_name = ann[3]
+        current_gene2 = ann[4]
+        print current_chr, current_pos, ann[1], current_gene_name
+
+    print len(avcf)
+
 
 if __name__ == "__main__":
     main(sys.argv[1:])
