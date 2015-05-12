@@ -25,9 +25,6 @@ def main(argv):
 
     args = parser.parse_args()
 
-    #answer = args.x**args.y
-    #print "INPUT = " , args.vcf
-
     if args.verbosity >= 2:
         print "{} to the power {} equals {}".format(args.v, args.o, answer)
     elif args.verbosity >= 1:
@@ -36,7 +33,7 @@ def main(argv):
         print "Starting ..."
 
     avcf = pybedtools.BedTool(args.vcf)
-    print avcf[0][7] + " -> " + avcf[0][8]
+    print avcf[0][7]
 
 if __name__ == "__main__":
     main(sys.argv[1:])
