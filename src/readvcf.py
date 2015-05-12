@@ -50,7 +50,7 @@ def main(argv):
         ann = info_snpeff[1].split("|")
         current_gene_name = ann[3]
         current_gene2 = ann[4]
-        out_str = [current_chr, current_pos, ann[1], current_gene_name, current_exon]
+        out_str = ["chr"+current_chr, current_pos, ann[1], current_gene_name, current_exon]
         print "\t".join(out_str)
 
     print len(avcf)
