@@ -46,9 +46,10 @@ def main(argv):
         info_lof = current_info[1].split("LOF=(")
 
         # VEP
-        csq_temp = info_vep[1].split(",")
-        csq = csq_temp[0].split("|")
-        current_LOF = csq[47]
+        csq_temp = info_vep[1].split(";")
+        csq_temp2 = csq_temp[0].split(",")
+        csq = csq_temp2[0].split("|")
+        current_LOF = csq[48]
         #current_exon = csq[26]
 
         # SnpEff
