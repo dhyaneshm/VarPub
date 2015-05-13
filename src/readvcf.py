@@ -49,12 +49,13 @@ def main(argv):
         csq_temp = info_vep[1].split(";")
         csq_temp2 = csq_temp[0].split(",")
         csq = csq_temp2[0].split("|")
+        current_vep_annotation = csq[4]
         current_LOF = csq[48]
         #current_exon = csq[26]
 
         # SnpEff
         ann = info_snpeff[1].split("|")
-        current_annotation = ann[1]
+        current_snpeff_annotation = ann[1]
         current_gene_name = ann[3]
         current_gene2 = ann[4]
         current_feature_type = ann[5]
@@ -63,7 +64,7 @@ def main(argv):
 
         # lof
 
-
+        current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
 
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
                 current_LOF, current_exon, current_aa_pos]
