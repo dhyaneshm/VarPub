@@ -29,8 +29,8 @@ def main(argv):
         print "{} to the power {} equals {}".format(args.v, args.o, answer)
     elif args.verbosity >= 1:
         print "{}^{} == {}".format(args.x, args.y, answer)
-    else:
-        print "Starting ..."
+    #else:
+    #    print "Starting ..."
 
     avcf = pybedtools.BedTool(args.vcf)
     current_info = avcf[0][7]
@@ -71,7 +71,7 @@ def main(argv):
             current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
 
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
-                "."+current_LOF, current_exon, current_aa_pos]
+                current_LOF, current_exon, current_aa_pos]
         print "\t".join(out_str)
 
     print len(avcf)
