@@ -43,9 +43,12 @@ def main(argv):
         current_info = avcf[x][7]
         info_vep = current_info.split("CSQ=")
         info_snpeff = current_info.split("ANN=")
+        info_lof = current_info[1].split("LOF=(")
 
         # VEP
-        csq = info_vep[1].split("|")
+        csq_temp = info_vep[1].split(",")
+        csq = csq_temp[0].split("|")
+        current_LOF = csq[47]
         #current_exon = csq[26]
 
         # SnpEff
@@ -56,8 +59,13 @@ def main(argv):
         current_feature_type = ann[5]
         current_exon = ann[8]
         current_aa_pos = ann[13]
+
+        # lof
+
+
+
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
-                current_exon, current_aa_pos]
+                current_LOF, current_exon, current_aa_pos]
         print "\t".join(out_str)
 
     print len(avcf)
