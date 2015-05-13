@@ -37,6 +37,8 @@ def main(argv):
     info = current_info.split("ANN=")
     ann = info[1].split("|")
 
+    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos"
+
     for x in xrange(0, len(avcf)):
         current_chr = avcf[x][0]
         current_pos = avcf[x][1]
@@ -62,12 +64,14 @@ def main(argv):
         current_exon = ann[8]
         current_aa_pos = ann[13]
 
-        # lof
-
-        current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
+        # current annotation
+        if current_vep_annotation == current_snpeff_annotation:
+            current_annotation = current_vep_annotation
+        else:
+            current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
 
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
-                current_LOF, current_exon, current_aa_pos]
+                "."+current_LOF, current_exon, current_aa_pos]
         print "\t".join(out_str)
 
     print len(avcf)
