@@ -44,13 +44,20 @@ def main(argv):
         info_vep = current_info.split("CSQ=")
         info_snpeff = current_info.split("ANN=")
 
+        # VEP
         csq = info_vep[1].split("|")
-        current_exon = csq[26]
+        #current_exon = csq[26]
 
+        # SnpEff
         ann = info_snpeff[1].split("|")
+        current_annotation = ann[1]
         current_gene_name = ann[3]
         current_gene2 = ann[4]
-        out_str = ["chr"+current_chr, current_pos, ann[1], current_gene_name, current_exon]
+        current_feature_type = ann[5]
+        current_exon = ann[8]
+        current_aa_pos = ann[13]
+        out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
+                current_exon, current_aa_pos]
         print "\t".join(out_str)
 
     print len(avcf)
