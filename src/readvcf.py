@@ -37,6 +37,9 @@ def main(argv):
     info = current_info.split("ANN=")
     ann = info[1].split("|")
 
+    current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
+            current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
+
     print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos"
 
     for x in xrange(0, len(avcf)):
@@ -51,22 +54,24 @@ def main(argv):
             csq_temp = info_vep[1].split(";")
             csq_temp2 = csq_temp[0].split(",")
             csq = csq_temp2[0].split("|")
+            map(lambda x:x if x!="" else '.',csq)
             current_vep_annotation = csq[4]
             current_vep_sift = csq[24].split("(")[0]
             current_vep_polyphen = csq[25].split("(")[0]
             current_LOF = csq[48]
             current_vep_eur_maf = csq[34]
             #current_exon = csq[26]
-        else:
-            current_vep_annotation = ""
-            current_LOF = ""
-            current_vep_sift = ""
-            current_vep_polyphen = ""
-            current_vep_eur_maf = ""
+        #else:
+        #    current_vep_annotation = ""
+        #    current_LOF = ""
+        #    current_vep_sift = ""
+        #    current_vep_polyphen = ""
+        #    current_vep_eur_maf = ""
 
         # SnpEff
         info_snpeff = current_info.split("ANN=")
         ann = info_snpeff[1].split("|")
+        map(lambda y:y if y!="" else '.',ann)
         current_snpeff_annotation = ann[1]
         current_gene_name = ann[3]
         current_gene2 = ann[4]
