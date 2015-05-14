@@ -37,8 +37,8 @@ def main(argv):
     info = current_info.split("ANN=")
     ann = info[1].split("|")
 
-    current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
-            current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
+    #current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
+    #        current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
 
     print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos"
 
