@@ -43,19 +43,23 @@ def main(argv):
         current_chr = avcf[x][0]
         current_pos = avcf[x][1]
         current_info = avcf[x][7]
-        info_vep = current_info.split("CSQ=")
-        info_snpeff = current_info.split("ANN=")
-        info_lof = current_info[1].split("LOF=(")
 
+        #checkInfoForVepAnnotaion(current_info)
         # VEP
-        csq_temp = info_vep[1].split(";")
-        csq_temp2 = csq_temp[0].split(",")
-        csq = csq_temp2[0].split("|")
-        current_vep_annotation = csq[4]
-        current_LOF = csq[48]
-        #current_exon = csq[26]
+        if "CSQ=" in current_info:
+            info_vep = current_info.split("CSQ=")
+            csq_temp = info_vep[1].split(";")
+            csq_temp2 = csq_temp[0].split(",")
+            csq = csq_temp2[0].split("|")
+            current_vep_annotation = csq[4]
+            current_LOF = csq[48]
+            #current_exon = csq[26]
+        else:
+            current_vep_annotation = ""
+            current_LOF = ""
 
         # SnpEff
+        info_snpeff = current_info.split("ANN=")
         ann = info_snpeff[1].split("|")
         current_snpeff_annotation = ann[1]
         current_gene_name = ann[3]
