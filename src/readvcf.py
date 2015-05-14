@@ -52,8 +52,8 @@ def main(argv):
             csq_temp2 = csq_temp[0].split(",")
             csq = csq_temp2[0].split("|")
             current_vep_annotation = csq[4]
-            current_vep_sift = csq[24]
-            current_vep_polyphen = csq[25]
+            current_vep_sift = csq[24].split("(")[0]
+            current_vep_polyphen = csq[25].split("(")[0]
             current_LOF = csq[48]
             #current_exon = csq[26]
         else:
