@@ -40,7 +40,7 @@ def main(argv):
     #current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
     #        current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
 
-    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos"
+    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tsift\tpolyphen\teur_maf"
 
     for x in xrange(0, len(avcf)):
         current_chr = avcf[x][0]
