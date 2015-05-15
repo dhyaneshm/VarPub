@@ -5,6 +5,7 @@ import os
 import argparse
 import getopt
 import pybedtools
+import array
 
 #class Error(Exception):
 #    """Base-class for exceptions in this module."""
@@ -40,7 +41,7 @@ def main(argv):
     #current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
     #        current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
 
-    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tsift\tpolyphen\teur_maf"
+    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tpoly/sift\teur_maf"
 
     for x in xrange(0, len(avcf)):
         current_chr = avcf[x][0]
@@ -54,24 +55,18 @@ def main(argv):
             csq_temp = info_vep[1].split(";")
             csq_temp2 = csq_temp[0].split(",")
             csq = csq_temp2[0].split("|")
-            map(lambda x:x if x!="" else '.',csq)
+            #csq = [x or '.' for x in csq]
             current_vep_annotation = csq[4]
             current_vep_sift = csq[24].split("(")[0]
             current_vep_polyphen = csq[25].split("(")[0]
             current_LOF = csq[48]
             current_vep_eur_maf = csq[34]
-            #current_exon = csq[26]
-        #else:
-        #    current_vep_annotation = ""
-        #    current_LOF = ""
-        #    current_vep_sift = ""
-        #    current_vep_polyphen = ""
-        #    current_vep_eur_maf = ""
+
 
         # SnpEff
         info_snpeff = current_info.split("ANN=")
         ann = info_snpeff[1].split("|")
-        map(lambda y:y if y!="" else '.',ann)
+        #ann = [x or '.' for x in ann]
         current_snpeff_annotation = ann[1]
         current_gene_name = ann[3]
         current_gene2 = ann[4]
@@ -83,10 +78,18 @@ def main(argv):
         if current_vep_annotation == current_snpeff_annotation:
             current_annotation = current_vep_annotation
         else:
-            current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
+            #current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
+            # FOR THE MOMENT ONLY PRINT snpeff ANNOTATION
+            current_annotation = current_snpeff_annotation
+
+        if "damaging" in current_vep_polyphen or "deleterious" in current_vep_sift:
+            current_polysift = "del"
+        else:
+            current_polysift = ''
 
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
-                current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf]
+                current_LOF, current_exon, current_aa_pos, current_polysift, current_vep_eur_maf]
+        out_str = [x or '.' for x in out_str]
         print "\t".join(out_str)
 
     print len(avcf)
