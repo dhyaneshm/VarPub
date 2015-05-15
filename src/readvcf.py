@@ -75,12 +75,13 @@ def main(argv):
         current_aa_pos = ann[13]
 
         # current annotation
-        if current_vep_annotation == current_snpeff_annotation:
-            current_annotation = current_vep_annotation
-        else:
-            #current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
-            # FOR THE MOMENT ONLY PRINT snpeff ANNOTATION
-            current_annotation = current_snpeff_annotation
+        #if current_vep_annotation == current_snpeff_annotation:
+        #    current_annotation = current_vep_annotation
+        #else:
+        #    #current_annotation = current_vep_annotation + "|" + current_snpeff_annotation
+        #    # FOR THE MOMENT ONLY PRINT snpeff ANNOTATION
+        #    current_annotation = current_snpeff_annotation
+        current_annotation = current_snpeff_annotation
 
         if "damaging" in current_vep_polyphen or "deleterious" in current_vep_sift:
             current_polysift = "del"
