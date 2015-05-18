@@ -101,6 +101,7 @@ def main(argv):
         out_str = [x or '.' for x in out_str]
         #print "\t".join(out_str)
         outputfile.write("\t".join(out_str))
+        outputfile.write("\n")
 
     #print len(avcf)
     outputfile.close()
