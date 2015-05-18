@@ -16,7 +16,7 @@ import array
 
 def main(argv):
     inputfile = ''
-    outputfile = ''
+    #outputfile = ''
     vcf = ''
 
     parser = argparse.ArgumentParser()
@@ -34,6 +34,7 @@ def main(argv):
     #    print "Starting ..."
 
     avcf = pybedtools.BedTool(args.vcf)
+    outputfile = open(args.out, "w")
     current_info = avcf[0][7]
     info = current_info.split("ANN=")
     ann = info[1].split("|")
@@ -41,7 +42,8 @@ def main(argv):
     #current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,\
     #        current_LOF, current_exon, current_aa_pos, current_vep_sift, current_vep_polyphen, current_vep_eur_maf = "."
 
-    print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tpoly/sift\teur_maf"
+    #print "chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tpoly/sift\teur_maf"
+    outputfile.write("chr\tpos\tannotation\tfeature_type\tgene_name\tlof\texon\taa_pos\tpoly/sift\teur_maf")
 
     for x in xrange(0, len(avcf)):
         current_chr = avcf[x][0]
@@ -97,9 +99,11 @@ def main(argv):
         out_str = ["chr"+current_chr, current_pos, current_annotation, current_feature_type, current_gene_name,
                 current_LOF, current_exon, current_aa_pos, current_polysift, current_vep_eur_maf]
         out_str = [x or '.' for x in out_str]
-        print "\t".join(out_str)
+        #print "\t".join(out_str)
+        outputfile.write("\t".join(out_str))
 
-    print len(avcf)
+    #print len(avcf)
+    outputfile.close()
 
 
 if __name__ == "__main__":
