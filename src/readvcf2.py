@@ -23,6 +23,7 @@ def main(argv):
     parser.add_argument("-v", "--verbosity", action="count", default=0)
 
     args = parser.parse_args()
+    outputfile = open(args.out, "w")
 
     if args.verbosity >= 2:
         print "{} to the power {} equals {}".format(args.v, args.o, answer)
@@ -33,7 +34,20 @@ def main(argv):
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
-        print record, record.INFO['AF']
+        current_chr = record.CHROM
+        current_pos = record.POS
+        current_ref = record.REF
+        print record.ALT
+        current_alt = str(record.ALT)
+        #print record, record.INFO['Het_FIN']
+
+        out_str = ["chr"+current_chr, current_pos, current_ref, current_alt]
+        out_str = [x or '.' for x in out_str]
+        outputfile.write("\t".join(out_str))
+        outputfile.write("\n")
+
+    outputfile.close()
+
 
 
 if __name__ == "__main__":
