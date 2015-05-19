@@ -32,7 +32,9 @@ def main(argv):
     #else:
     #    print "Starting ..."
 
-    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof\texon\taa_pos\tpoly/sift\teur_maf")
+    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
+            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
+            "HETEUR\tHOMEUR\n")
 
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
@@ -41,28 +43,52 @@ def main(argv):
         current_pos = record.POS
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
+        current_af = ','.join(str(v) for v in record.INFO['AF'])
+        current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
+        current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
 
         # VEP
         if "CSQ" in record.INFO:
-            current_vep = record.INFO['CSQ'][0].split('|')
-            current_feature = current_vep[2]
-            current_feature_type = current_vep[3]
-            current_consequence = current_vep[4]
+            csq = record.INFO['CSQ'][0].split('|')
+            current_feature = csq[2]
+            current_feature_type = csq[3]
+            current_consequence = csq[4]
+            current_sift = csq[24].split("(")[0]
+            current_polyphen = csq[25].split("(")[0]
+            current_eur_maf = csq[34]
+            current_ea_maf = csq[37]
+            current_LOF = csq[48]
+            current_gmaf = csq[31]
         else:
             current_feature = ''
             current_feature_type = ''
             current_consequence = ''
+            current_sift = ''
+            current_polyphen = ''
+            current_eur_maf = ''
+            current_ea_maf = ''
+            current_LOF = ''
+            current_gmaf = ''
 
 
         # SnpEff
-        current_ann = record.INFO['ANN'][0].split('|')
-        current_annotation = current_ann[1]
-        # current_annotation_impact = current_ann[2]
-        current_gene = current_ann[3]
+        ann = record.INFO['ANN'][0].split('|')
+        annotation = ann[1]
+        # annotation_impact = ann[2]
+        current_gene = ann[3]
+        current_exon = ann[8]
+        current_aa_pos = ann[13]
+
+        if "damaging" in current_polyphen or "deleterious" in current_sift:
+            current_polysift = "del"
+        else:
+            current_polysift = ''
 
 
         out_str = ["chr"+current_chr, str(current_pos), current_ref, current_alt,
-                current_annotation, current_gene ]
+                annotation, current_gene, current_LOF, current_exon,
+                current_aa_pos, current_polysift, current_af, current_gmaf,
+                current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
