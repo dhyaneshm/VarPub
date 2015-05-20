@@ -7,6 +7,7 @@ import getopt
 #import pybedtools
 import vcf
 import array
+import pysam
 
 #class Error(Exception):
 #    """Base-class for exceptions in this module."""
@@ -31,10 +32,11 @@ def main(argv):
         print "{}^{} == {}".format(args.x, args.y, answer)
     #else:
     #    print "Starting ..."
+    cadd_tbx = pysam.TabixFile("data/example.bed.gz")
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\n")
+            "HETEUR\tHOMEUR\tCADD\n")
 
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
@@ -79,6 +81,19 @@ def main(argv):
         current_exon = ann[8]
         current_aa_pos = ann[13]
 
+        #CADD
+        tbx = pysam.TabixFile("example.bed.gz")
+        for row in tbx.fetch("chr"+current_chr, current_pos, current_pos):
+            row_info = row.split("\t")
+            cadd_ref = row_info[2]
+            cadd_alt = row_info[4]
+            if( cadd_ref is current_ref and cadd_alt is current_alt )
+                cadd_phred = row_info[115]
+            else
+                cadd_phred = ''
+            #    print (str(row))
+
+
         if "damaging" in current_polyphen or "deleterious" in current_sift:
             current_polysift = "del"
         else:
@@ -88,7 +103,8 @@ def main(argv):
         out_str = ["chr"+current_chr, str(current_pos), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, current_polysift, current_af, current_gmaf,
-                current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe ]
+                current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
+                cadd_phred]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
