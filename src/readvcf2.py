@@ -32,7 +32,7 @@ def main(argv):
         print "{}^{} == {}".format(args.x, args.y, answer)
     #else:
     #    print "Starting ..."
-    cadd_tbx = pysam.TabixFile("data/example.bed.gz")
+    cadd_tbx = pysam.TabixFile("data/whole_genome_SNVs_inclAnno.tsv.gz")
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
