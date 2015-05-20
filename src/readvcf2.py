@@ -87,7 +87,7 @@ def main(argv):
             row_info = row.split("\t")
             cadd_ref = row_info[2]
             cadd_alt = row_info[4]
-            if( cadd_ref is current_ref and cadd_alt is current_alt )
+            if( cadd_ref == current_ref and cadd_alt == current_alt )
                 cadd_phred = row_info[115]
             else
                 cadd_phred = ''
