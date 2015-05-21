@@ -103,7 +103,7 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, current_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred]
+                "CADD="+cadd_phred]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
