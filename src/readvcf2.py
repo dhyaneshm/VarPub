@@ -82,11 +82,11 @@ def main(argv):
         current_aa_pos = ann[13]
 
         #CADD
-        for row in cadd_tbx.fetch("chr"+current_chr, current_pos, current_pos):
+        for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
             row_info = row.split("\t")
             cadd_ref = row_info[2]
             cadd_alt = row_info[4]
-            if(cadd_ref == current_ref & cadd_alt == current_alt):
+            if(cadd_ref == current_ref and cadd_alt == current_alt):
                 cadd_phred = row_info[115]
             else:
                 cadd_phred = ''
