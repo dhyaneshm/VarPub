@@ -82,7 +82,6 @@ def main(argv):
         current_aa_pos = ann[13]
 
         #CADD
-        tbx = pysam.TabixFile("example.bed.gz")
         for row in tbx.fetch("chr"+current_chr, current_pos, current_pos):
             row_info = row.split("\t")
             cadd_ref = row_info[2]
