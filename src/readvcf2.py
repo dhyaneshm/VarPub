@@ -101,7 +101,7 @@ def main(argv):
         current_aa_pos = ann[13]
 
         #CADD
-        cadd_phred, cadd_priPhCons, cadd_GerpRS
+        # cadd_phred, cadd_priPhCons, cadd_GerpRS
         (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx)
         (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx)
         #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
