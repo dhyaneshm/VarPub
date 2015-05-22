@@ -3,3 +3,5 @@ BRCA2.snpeff.vcf
 1kg.phase1.snp.bed.gz
 o
 out
+small.tsv.gz
+small.tsv.gz.tbi

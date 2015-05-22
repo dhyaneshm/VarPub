@@ -88,9 +88,12 @@ def main(argv):
             cadd_alt = row_info[4]
             if(cadd_ref == current_ref and cadd_alt == current_alt):
                 cadd_phred = row_info[115]
+                cadd_priPhCons = row_info[18]
+                cadd_GerpRS = row_info[26]
             else:
                 cadd_phred = ''
-            #    print (str(row))
+                cadd_priPhCons = ''
+                cadd_GerpRS = ''
 
 
         if "damaging" in current_polyphen or "deleterious" in current_sift:
@@ -99,11 +102,11 @@ def main(argv):
             current_polysift = ''
 
 
-        out_str = ["chr"+current_chr, str(current_pos), current_ref, current_alt,
+        out_str = [ "chr"+current_chr, str(current_pos), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, current_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                "CADD="+cadd_phred]
+                cadd_phred, cadd_priPhCons, cadd_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
