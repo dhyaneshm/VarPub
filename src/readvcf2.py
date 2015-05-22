@@ -4,7 +4,6 @@ import sys
 import os
 import argparse
 import getopt
-#import pybedtools
 import vcf
 import array
 import pysam
@@ -15,6 +14,25 @@ import pysam
 #class UsageError(Error):
 #    def __init__(self, msg):
 #        self.msg = msg
+
+def getcadd(cadd_tbx):
+    for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
+        row_info = row.split("\t")
+        cadd_ref = row_info[2]
+        cadd_alt = row_info[4]
+        if(cadd_ref == current_ref and cadd_alt == current_alt):
+            cadd_phred = row_info[115]
+            cadd_priPhCons = row_info[18]
+            cadd_GerpRS = row_info[26]
+        else:
+            cadd_phred = ''
+            cadd_priPhCons = ''
+            cadd_GerpRS = ''
+
+        #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
+        return cadd_phred, cadd_priPhCons, cadd_GerpRS
+
+
 
 def main(argv):
 
@@ -33,6 +51,7 @@ def main(argv):
     #else:
     #    print "Starting ..."
     cadd_tbx = pysam.TabixFile("data/whole_genome_SNVs_inclAnno.tsv.gz")
+    cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
@@ -82,18 +101,21 @@ def main(argv):
         current_aa_pos = ann[13]
 
         #CADD
-        for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
-            row_info = row.split("\t")
-            cadd_ref = row_info[2]
-            cadd_alt = row_info[4]
-            if(cadd_ref == current_ref and cadd_alt == current_alt):
-                cadd_phred = row_info[115]
-                cadd_priPhCons = row_info[18]
-                cadd_GerpRS = row_info[26]
-            else:
-                cadd_phred = ''
-                cadd_priPhCons = ''
-                cadd_GerpRS = ''
+        cadd_phred, cadd_priPhCons, cadd_GerpRS
+        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx)
+        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx)
+        #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
+        #    row_info = row.split("\t")
+        #    cadd_ref = row_info[2]
+        #    cadd_alt = row_info[4]
+        #    if(cadd_ref == current_ref and cadd_alt == current_alt):
+        #        cadd_phred = row_info[115]
+        #        cadd_priPhCons = row_info[18]
+        #        cadd_GerpRS = row_info[26]
+        #    else:
+        #        cadd_phred = ''
+        #        cadd_priPhCons = ''
+        #        cadd_GerpRS = ''
 
 
         if "damaging" in current_polyphen or "deleterious" in current_sift:
@@ -106,7 +128,8 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, current_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, cadd_priPhCons, cadd_GerpRS ]
+                #cadd_snp, cadd_indel ]
+                cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
