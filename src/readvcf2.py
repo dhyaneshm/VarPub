@@ -36,7 +36,7 @@ def main(argv):
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\tCADD\n")
+            "HETEUR\tHOMEUR\tCADD\tpriPhCons\tGerpRS\n")
 
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
