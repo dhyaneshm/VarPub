@@ -102,9 +102,9 @@ def main(argv):
 
         #CADD
         # cadd_phred, cadd_priPhCons, cadd_GerpRS
-        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr,
+        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr, \
                 current_pos, current_ref, current_alt)
-        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr,
+        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, \
                 current_pos, current_ref, current_alt)
         #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
         #    row_info = row.split("\t")
