@@ -33,7 +33,6 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
         return cadd_phred, cadd_priPhCons, cadd_GerpRS
 
 
-
 def main(argv):
 
     parser = argparse.ArgumentParser()
@@ -100,12 +99,12 @@ def main(argv):
         current_exon = ann[8]
         current_aa_pos = ann[13]
 
-        #CADD
+        #CADD SNP
         # cadd_phred, cadd_priPhCons, cadd_GerpRS
-        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr, \
-                current_pos, current_ref, current_alt)
-        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, \
-                current_pos, current_ref, current_alt)
+        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
+        #CADD INDEL
+        #(cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+
         #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
         #    row_info = row.split("\t")
         #    cadd_ref = row_info[2]
