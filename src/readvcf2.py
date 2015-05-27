@@ -103,7 +103,7 @@ def main(argv):
         # cadd_phred, cadd_priPhCons, cadd_GerpRS
         (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
         #CADD INDEL
-        #(cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
 
         #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
         #    row_info = row.split("\t")
@@ -130,13 +130,12 @@ def main(argv):
                 current_aa_pos, current_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
                 #cadd_snp, cadd_indel ]
-                cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
+                cadd_snp_phred, cadd_indel_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
 
     outputfile.close()
-
 
 
 if __name__ == "__main__":
