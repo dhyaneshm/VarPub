@@ -16,21 +16,25 @@ import pysam
 #        self.msg = msg
 
 def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
-    for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
-        row_info = row.split("\t")
-        cadd_ref = row_info[2]
-        cadd_alt = row_info[4]
-        if(cadd_ref == current_ref and cadd_alt == current_alt):
-            cadd_phred = row_info[115]
-            cadd_priPhCons = row_info[18]
-            cadd_GerpRS = row_info[26]
-        else:
-            cadd_phred = ''
-            cadd_priPhCons = ''
-            cadd_GerpRS = ''
+    data = cadd_tbx.fetch(current_chr, current_pos-1, current_pos)
+    if data:
+        for row in data:
+            row_info = row.split("\t")
+            cadd_ref = row_info[2]
+            cadd_alt = row_info[4]
+            if(cadd_ref == current_ref and cadd_alt == current_alt):
+                cadd_phred = row_info[115]
+                cadd_priPhCons = row_info[18]
+                cadd_GerpRS = row_info[26]
+            else:
+                cadd_phred = ''
+                cadd_priPhCons = ''
+                cadd_GerpRS = ''
+    else:
+        cadd_phred, cadd_priPhCons, cadd_GerpRS = ''
 
-        #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
-        return cadd_phred, cadd_priPhCons, cadd_GerpRS
+    #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
+    return cadd_phred, cadd_priPhCons, cadd_GerpRS
 
 
 def main(argv):
