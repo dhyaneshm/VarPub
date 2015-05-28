@@ -17,6 +17,9 @@ import pysam
 
 def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
     data = cadd_tbx.fetch(current_chr, current_pos-1, current_pos)
+    cadd_phred = ''
+    cadd_priPhCons = ''
+    cadd_GerpRS = ''
     if data is not None:
         for row in data:
             row_info = row.split("\t")
