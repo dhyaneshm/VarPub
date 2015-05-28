@@ -17,7 +17,7 @@ import pysam
 
 def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
     data = cadd_tbx.fetch(current_chr, current_pos-1, current_pos)
-    if data:
+    if data is not None:
         for row in data:
             row_info = row.split("\t")
             cadd_ref = row_info[2]
@@ -31,7 +31,9 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
                 cadd_priPhCons = ''
                 cadd_GerpRS = ''
     else:
-        cadd_phred, cadd_priPhCons, cadd_GerpRS = ''
+        cadd_phred = ''
+        cadd_priPhCons = ''
+        cadd_GerpRS = ''
 
     #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
     return cadd_phred, cadd_priPhCons, cadd_GerpRS
