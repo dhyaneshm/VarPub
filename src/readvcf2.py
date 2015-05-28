@@ -111,6 +111,11 @@ def main(argv):
         #CADD INDEL
         (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
 
+        if cadd_snp_phred:
+            single_cadd_score = cadd_snp_phred
+        else:
+            single_cadd_score = cadd_indel_phred
+
         #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
         #    row_info = row.split("\t")
         #    cadd_ref = row_info[2]
@@ -136,7 +141,7 @@ def main(argv):
                 current_aa_pos, current_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
                 #cadd_snp, cadd_indel ]
-                cadd_snp_phred, cadd_indel_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
+                single_cadd_score, cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
