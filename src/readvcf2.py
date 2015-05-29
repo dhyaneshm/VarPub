@@ -40,7 +40,6 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
     return cadd_phred, cadd_priPhCons, cadd_GerpRS, \
             cadd_polysift
 
-
 def main(argv):
 
     parser = argparse.ArgumentParser()
@@ -74,6 +73,10 @@ def main(argv):
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
+        # CHECK INDEL AND MNP
+        indel = True if len(current_ref) > 1 or len(current_alt) > 1 else False
+        # mnp = map(labmda x, len(record.ALT)
+        mnp = True if len(record.ALT) > 1 else False
 
         # VEP
         if "CSQ" in record.INFO:
@@ -100,7 +103,7 @@ def main(argv):
         (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                 getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
         #CADD INDEL
-        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift_dummy) = \
                 getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
 
         if cadd_snp_phred:
