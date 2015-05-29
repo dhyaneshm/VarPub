@@ -103,7 +103,7 @@ def main(argv):
 
         #CADD SNP
         cadd_phred = ''
-        if !indel:
+        if not indel:
             (cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                     getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
         else:
