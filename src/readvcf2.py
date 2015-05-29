@@ -17,9 +17,8 @@ import pysam
 
 def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
     data = cadd_tbx.fetch(current_chr, current_pos-1, current_pos)
-    cadd_phred = ''
-    cadd_priPhCons = ''
-    cadd_GerpRS = ''
+    cadd_phred, cadd_priPhCons, cadd_GerpRS = '','',''
+    cadd_polysift, cadd_test1, cadd_test2 = '','',''
     if data is not None:
         for row in data:
             row_info = row.split("\t")
@@ -29,17 +28,16 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
                 cadd_phred = row_info[115]
                 cadd_priPhCons = row_info[18]
                 cadd_GerpRS = row_info[26]
-            else:
-                cadd_phred = ''
-                cadd_priPhCons = ''
-                cadd_GerpRS = ''
-    else:
-        cadd_phred = ''
-        cadd_priPhCons = ''
-        cadd_GerpRS = ''
+                if "damaging" in row_info[110] or "deleterious" in row_info[113]:
+                    cadd_polysift = "del"
+    #else:
+    #    cadd_phred = ''
+    #    cadd_priPhCons = ''
+    #    cadd_GerpRS = ''
 
     #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
-    return cadd_phred, cadd_priPhCons, cadd_GerpRS
+    return cadd_phred, cadd_priPhCons, cadd_GerpRS, \
+            cadd_polysift
 
 
 def main(argv):
@@ -72,6 +70,7 @@ def main(argv):
         current_pos = record.POS
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
+        current_alt_array = current_alt.split(",")
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
@@ -79,71 +78,41 @@ def main(argv):
         # VEP
         if "CSQ" in record.INFO:
             csq = record.INFO['CSQ'][0].split('|')
-            current_feature = csq[2]
-            current_feature_type = csq[3]
+            current_feature, current_feature_type = csq[2], csq[3]
             current_consequence = csq[4]
             current_sift = csq[24].split("(")[0]
             current_polyphen = csq[25].split("(")[0]
-            current_eur_maf = csq[34]
-            current_ea_maf = csq[37]
+            current_gmaf, current_eur_maf, current_ea_maf =  csq[31], csq[34], csq[37]
             current_LOF = csq[48]
-            current_gmaf = csq[31]
         else:
-            current_feature = ''
-            current_feature_type = ''
-            current_consequence = ''
-            current_sift = ''
-            current_polyphen = ''
-            current_eur_maf = ''
-            current_ea_maf = ''
-            current_LOF = ''
-            current_gmaf = ''
+            current_feature, current_feature_type, current_consequence = '','',''
+            current_sift, current_polyphen, current_eur_maf = '','',''
+            current_ea_maf, current_LOF, current_gmaf = '','',''
 
 
         # SnpEff
         ann = record.INFO['ANN'][0].split('|')
         annotation = ann[1]
-        # annotation_impact = ann[2]
-        current_gene = ann[3]
-        current_exon = ann[8]
-        current_aa_pos = ann[13]
+        #   GENE INFORMATION
+        current_gene, current_exon, current_aa_pos = ann[3], ann[8], ann[13]
 
         #CADD SNP
-        # cadd_phred, cadd_priPhCons, cadd_GerpRS
-        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS) = getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
+        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
         #CADD INDEL
-        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS) = getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
 
         if cadd_snp_phred:
             single_cadd_score = cadd_snp_phred
         else:
             single_cadd_score = cadd_indel_phred
 
-        #for row in cadd_tbx.fetch(current_chr, current_pos-1, current_pos):
-        #    row_info = row.split("\t")
-        #    cadd_ref = row_info[2]
-        #    cadd_alt = row_info[4]
-        #    if(cadd_ref == current_ref and cadd_alt == current_alt):
-        #        cadd_phred = row_info[115]
-        #        cadd_priPhCons = row_info[18]
-        #        cadd_GerpRS = row_info[26]
-        #    else:
-        #        cadd_phred = ''
-        #        cadd_priPhCons = ''
-        #        cadd_GerpRS = ''
-
-
-        if "damaging" in current_polyphen or "deleterious" in current_sift:
-            current_polysift = "del"
-        else:
-            current_polysift = ''
-
 
         out_str = [ "chr"+current_chr, str(current_pos), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
-                current_aa_pos, current_polysift, current_af, current_gmaf,
+                current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                #cadd_snp, cadd_indel ]
                 single_cadd_score, cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
