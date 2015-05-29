@@ -28,8 +28,9 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
                 cadd_phred = row_info[115]
                 cadd_priPhCons = row_info[18]
                 cadd_GerpRS = row_info[26]
-                if "damaging" in row_info[110] or "deleterious" in row_info[113]:
+                if "damaging" in row_info[110] or "deleterious" in row_info[112]:
                     cadd_polysift = "del"
+                break
     #else:
     #    cadd_phred = ''
     #    cadd_priPhCons = ''
@@ -62,7 +63,6 @@ def main(argv):
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
             "HETEUR\tHOMEUR\tCADD\tpriPhCons\tGerpRS\n")
-
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
