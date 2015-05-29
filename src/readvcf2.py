@@ -69,7 +69,7 @@ def main(argv):
         current_pos = record.POS
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
-        current_alt_array = current_alt.split(",")
+        #current_alt_array = current_alt.split(",")
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
@@ -77,6 +77,8 @@ def main(argv):
         indel = True if len(current_ref) > 1 or len(current_alt) > 1 else False
         # mnp = map(labmda x, len(record.ALT)
         mnp = True if len(record.ALT) > 1 else False
+
+        #for current_alt in record.ALT:
 
         # VEP
         if "CSQ" in record.INFO:
@@ -100,11 +102,13 @@ def main(argv):
         current_gene, current_exon, current_aa_pos = ann[3], ann[8], ann[13]
 
         #CADD SNP
-        (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
-                getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
-        #CADD INDEL
-        (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift_dummy) = \
-                getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+        if !indel:
+            (cadd_snp_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                    getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
+        else:
+            #CADD INDEL
+            (cadd_indel_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                    getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
 
         if cadd_snp_phred:
             single_cadd_score = cadd_snp_phred
