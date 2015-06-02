@@ -74,7 +74,8 @@ def main(argv):
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
         # CHECK INDEL AND MNP
-        indel = True if ( len(current_ref) > 1 or len(current_alt) > 1 and ("," not in current_alt ) ) else False
+        indel = True if ((len(current_ref) > 1 or len(current_alt) > 1) and \
+                ("," not in current_ref or "," not in current_alt)) else False
         # mnp = map(labmda x, len(record.ALT)
         mnp = True if len(record.ALT) > 1 else False
 
