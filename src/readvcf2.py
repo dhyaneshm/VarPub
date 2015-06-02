@@ -102,14 +102,22 @@ def main(argv):
         current_gene, current_exon, current_aa_pos = ann[3], ann[8], ann[13]
 
         #CADD SNP
+        cadd_phred_temp = ''
         cadd_phred = ''
+        indel = ''
+        mnp_cadds = []
         if not indel:
-            (cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
-                    getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt)
+            for alt in record.ALT:
+                (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                        getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
+                mnp_list.append(str(alt) + ":" + cadd_phred_temp)
+                cadd_phred = ",".join(mnp_list)
+                indel = "F"
         else:
             #CADD INDEL
             (cadd_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                     getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+            indel = "T"
 
         #if cadd_snp_phred:
         #    single_cadd_score = cadd_snp_phred
@@ -121,7 +129,7 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
+                cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, indel ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
