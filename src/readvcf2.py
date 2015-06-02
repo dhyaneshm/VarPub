@@ -110,8 +110,8 @@ def main(argv):
             for alt in record.ALT:
                 (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                         getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
-                mnp_list.append(str(alt) + ":" + cadd_phred_temp)
-                cadd_phred = ",".join(mnp_list)
+                mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+                cadd_phred = ",".join(mnp_cadds)
                 indel = "F"
         else:
             #CADD INDEL
