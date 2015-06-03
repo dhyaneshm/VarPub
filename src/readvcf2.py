@@ -96,7 +96,6 @@ def main(argv):
             current_sift, current_polyphen, current_eur_maf = '','',''
             current_ea_maf, current_LOF, current_gmaf = '','',''
 
-
         # SnpEff
         ann = record.INFO['ANN'][0].split('|')
         annotation = ann[1]
@@ -108,29 +107,19 @@ def main(argv):
         cadd_phred = ''
         indel_str= ''
         mnp_cadds = []
-        if not indel:
-            for alt in record.ALT:
-                if(len(alt) == 1):
-                    (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
-                            getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
-                    mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
-                else:
-                    (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
-                            getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
-                    mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
-            cadd_phred = ",".join(mnp_cadds)
-            indel_str = "."
-        else:
-            #CADD INDEL
-            (cadd_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
-                    getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
-            indel_str = "Indel"
 
-        #if cadd_snp_phred:
-        #    single_cadd_score = cadd_snp_phred
-        #else:
-        #    single_cadd_score = cadd_indel_phred
+        for alt in record.ALT:
+            if(len(current_ref) == 1 and len(alt) == 1):
+                (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                        getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
+                mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+            else:
+                (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                        getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+                mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
 
+        cadd_phred = ",".join(mnp_cadds)
+        # indel_str = "."
 
         out_str = [ "chr"+current_chr, str(current_pos), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
