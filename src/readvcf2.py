@@ -74,7 +74,7 @@ def main(argv):
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
         # CHECK INDEL AND MNP
-        print current_ref + ":" + current_alt
+        #print current_ref + ":" + current_alt
         indel = True if ((len(current_ref) > 1 or len(current_alt) > 1) and \
                 ("," not in current_ref and "," not in current_alt)) else False
         # mnp = map(labmda x, len(record.ALT)
@@ -107,17 +107,15 @@ def main(argv):
         cadd_phred = ''
         indel_str= ''
         mnp_cadds = []
-
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
                 (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                         getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
-            else:
+            else: # IF VAR IS AN INDEL
                 (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
-                        getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+                        getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
-
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
 
