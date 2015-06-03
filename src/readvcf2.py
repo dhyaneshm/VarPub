@@ -74,8 +74,9 @@ def main(argv):
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
         # CHECK INDEL AND MNP
+        print current_ref + ":" + current_alt
         indel = True if ((len(current_ref) > 1 or len(current_alt) > 1) and \
-                ("," not in current_ref or "," not in current_alt)) else False
+                ("," not in current_ref and "," not in current_alt)) else False
         # mnp = map(labmda x, len(record.ALT)
         mnp = True if len(record.ALT) > 1 else False
 
@@ -105,20 +106,25 @@ def main(argv):
         #CADD SNP
         cadd_phred_temp = ''
         cadd_phred = ''
-        indel = ''
+        indel_str= ''
         mnp_cadds = []
         if not indel:
             for alt in record.ALT:
-                (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
-                        getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
-                mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
-                cadd_phred = ",".join(mnp_cadds)
-                indel = "F"
+                if(len(alt) == 1):
+                    (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                            getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
+                    mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+                else:
+                    (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                            getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
+                    mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+            cadd_phred = ",".join(mnp_cadds)
+            indel_str = "."
         else:
             #CADD INDEL
             (cadd_phred, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                     getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, current_alt)
-            indel = "T"
+            indel_str = "Indel"
 
         #if cadd_snp_phred:
         #    single_cadd_score = cadd_snp_phred
@@ -130,7 +136,7 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS, indel ]
+                cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
