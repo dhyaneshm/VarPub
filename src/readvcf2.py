@@ -61,7 +61,7 @@ def main(argv):
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\tCADD\tpriPhCons\tGerpRS\n")
+            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
@@ -107,15 +107,18 @@ def main(argv):
         cadd_phred = ''
         indel_str= ''
         mnp_cadds = []
+        cadd_scores = []
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
                 (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                         getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+                cadd_scores.append(cadd_phred_temp)
             else: # IF VAR IS AN INDEL
                 (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                         getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
+                cadd_scores.append(cadd_phred_temp)
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
 
@@ -123,7 +126,7 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, cadd_snp_priPhCons, cadd_snp_GerpRS ]
+                cadd_phred, str(max(cadd_scores)), cadd_snp_priPhCons, cadd_snp_GerpRS ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
