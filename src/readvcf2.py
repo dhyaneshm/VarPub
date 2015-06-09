@@ -133,7 +133,7 @@ def main(argv):
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
                 cadd_scores.append(cadd_phred_temp)
                 # GET FATHMM SCORE
-                fathmm_score = getfathmm(current_chr, current_pos, current_ref, alt)
+                fathmm_score = getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, alt)
             else: # IF VAR IS AN INDEL
                 (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                         getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
