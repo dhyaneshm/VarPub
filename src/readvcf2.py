@@ -75,9 +75,9 @@ def main(argv):
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
     fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
 
-    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \ # 7
-            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \ # 14
-            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \ # 20
+    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
+            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
+            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
             "FATHMM\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
