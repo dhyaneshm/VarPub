@@ -43,10 +43,10 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
     if data is not None:
         for row in data:
             row_info = row.split("\t")
-            fathmm_ref = row_info[2]
+            fathmm_ref = row_info[3]
             fathmm_alt = row_info[4]
             if(fathmm_ref == current_ref and fathmm_alt == current_alt):
-                fathmm_score = row_info[6]
+                fathmm_score = row_info[7]
                 break
     # else:
     #    fathmm_score = ''
