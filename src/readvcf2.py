@@ -31,14 +31,29 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
                 if "damaging" in row_info[110] or "deleterious" in row_info[112]:
                     cadd_polysift = "del"
                 break
-    #else:
-    #    cadd_phred = ''
-    #    cadd_priPhCons = ''
-    #    cadd_GerpRS = ''
+    else:
+        cadd_phred = '.'
 
-    #current_cadd_str = cadd_phred + "\t" + v) for v in record.INFO['AF'])
     return cadd_phred, cadd_priPhCons, cadd_GerpRS, \
             cadd_polysift
+
+def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
+    data = fathmm_tbx.fetch(current_chr, current_pos, current_pos)
+    fathmm_score = ''
+    if data is not None:
+        for row in data:
+            row_info = row.split("\t")
+            fathmm_ref = row_info[2]
+            fathmm_alt = row_info[4]
+            if(fathmm_ref == current_ref and fathmm_alt == current_alt):
+                fathmm_score = row_info[6]
+                break
+    # else:
+    #    fathmm_score = ''
+
+    return fathmm_score
+
+# MAIN
 
 def main(argv):
 
@@ -58,10 +73,12 @@ def main(argv):
     #    print "Starting ..."
     cadd_tbx = pysam.TabixFile("data/whole_genome_SNVs_inclAnno.tsv.gz")
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
+    fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\n")
+            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
+            "FATHMM\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
@@ -69,7 +86,7 @@ def main(argv):
         current_pos = record.POS
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
-        #current_alt_array = current_alt.split(",")
+        #current_alt_array = current_alt.split(","
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
@@ -108,12 +125,15 @@ def main(argv):
         indel_str= ''
         mnp_cadds = []
         cadd_scores = []
+        fathmm_score = ''
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
                 (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
                         getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
                 cadd_scores.append(cadd_phred_temp)
+                # GET FATHMM SCORE
+                fathmm_score = getfathmm(current_chr, current_pos, current_ref, alt)
             else: # IF VAR IS AN INDEL
                 (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                         getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
@@ -126,7 +146,8 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, str(max(cadd_scores)), cadd_snp_priPhCons, cadd_snp_GerpRS ]
+                cadd_phred, str(max(cadd_scores)), cadd_snp_priPhCons, cadd_snp_GerpRS,
+                fathmm_score ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
