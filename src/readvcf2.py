@@ -38,7 +38,7 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
             cadd_polysift
 
 def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
-    data = fathmm_tbx.fetch(current_chr, current_pos, current_pos)
+    data = fathmm_tbx.fetch(current_chr, current_pos-1, current_pos)
     fathmm_score = ''
     if data is not None:
         for row in data:
@@ -75,9 +75,9 @@ def main(argv):
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
     fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
 
-    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
-            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
+    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \ # 7
+            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \ # 14
+            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \ # 20
             "FATHMM\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
