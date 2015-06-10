@@ -138,7 +138,7 @@ def main(argv):
                 # GET FATHMM SCORE
                 fathmm_score = getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, alt)
             else: # IF VAR IS AN INDEL
-                (cadd_phred_temp, cadd_ndel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                (cadd_phred_temp, cadd_priPhCons, cadd_GerpRS, cadd_polysift) = \
                         getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
                 cadd_scores.append(cadd_phred_temp)
