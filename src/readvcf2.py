@@ -100,9 +100,9 @@ def main(argv):
         #for current_alt in record.ALT:
 
         # VEP
-        current_sift, current_polyphen, current_consequence, current_LOF = ''
-        current_gmaf, current_eur_maf, current_ea_maf = ''
-        current_feature, current_feature_type = ''
+        current_sift, current_polyphen, current_consequence, current_LOF = '','','',''
+        current_gmaf, current_eur_maf, current_ea_maf = '','',''
+        current_feature, current_feature_type = '',''
         if "CSQ" in record.INFO:
             csq = record.INFO['CSQ'][0].split('|')
             current_feature, current_feature_type = csq[2], csq[3]
