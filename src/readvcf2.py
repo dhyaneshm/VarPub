@@ -131,14 +131,14 @@ def main(argv):
         fathmm_score = ''
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
-                (cadd_phred_temp, cadd_snp_priPhCons, cadd_snp_GerpRS, cadd_polysift) = \
+                (cadd_phred_temp, cadd_priPhCons, cadd_GerpRS, cadd_polysift) = \
                         getcadd(cadd_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
                 cadd_scores.append(cadd_phred_temp)
                 # GET FATHMM SCORE
                 fathmm_score = getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, alt)
             else: # IF VAR IS AN INDEL
-                (cadd_phred_temp, cadd_indel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
+                (cadd_phred_temp, cadd_ndel_priPhCons, cadd_indel_GerpRS, cadd_polysift) = \
                         getcadd(cadd_indel_tbx, current_chr, current_pos, current_ref, alt)
                 mnp_cadds.append(str(alt) + ":" + cadd_phred_temp)
                 cadd_scores.append(cadd_phred_temp)
@@ -149,7 +149,7 @@ def main(argv):
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
-                cadd_phred, str(max(cadd_scores)), cadd_snp_priPhCons, cadd_snp_GerpRS,
+                cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 fathmm_score ]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
