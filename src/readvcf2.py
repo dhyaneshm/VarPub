@@ -1,3 +1,9 @@
+'''
+A tool to annotate and print variants in tabular format.
+Author: Khalid Mahmood (khalid.mahmood@unimelb.edu.au).
+Copyright: 2015
+'''
+
 #!/usr/bin/python
 
 import sys
