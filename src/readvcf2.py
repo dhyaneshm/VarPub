@@ -96,6 +96,20 @@ def main(argv):
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
+
+        # check if the variant is in ExAC annotated
+        if any("ExAC" in s for s in record.INFP):
+            current_exac_af = record.INFO['ExAC_AC_Adj']/record.INFO['ExAC_AN_Adj'] # Total adjusted
+            current_exac_eas = record.INFO['ExAC_AC_EAS']/record.INFO['ExAC_AN_EAS'] # East Asians
+            current_exac_nfe = record.INFO['ExAC_AC_NFE']/record.INFO['ExAC_AN_NFE'] # NonFin Eur
+            current_exac_fin = record.INFO['ExAC_AC_FIN']/record.INFO['ExAC_AN_FIN'] # Fin Eur
+            current_exac_sas = record.INFO['ExAC_AC_SAS']/record.INFO['ExAC_AN_SAS'] # South Asian
+            current_exac_afr = record.INFO['ExAC_AC_AFR']/record.INFO['ExAC_AN_AFR'] # African
+            current_exac_amr = record.INFO['ExAC_AC_AMR']/record.INFO['ExAC_AN_AMR'] # Latino
+            current_exac_oth = record.INFO['ExAC_AC_OTH']/record.INFO['ExAC_AN_OTH'] # Other
+
+
+
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
         indel = True if ((len(current_ref) > 1 or len(current_alt) > 1) and \
