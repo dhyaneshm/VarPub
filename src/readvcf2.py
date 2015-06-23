@@ -107,8 +107,10 @@ def main(argv):
             current_exac_afr = record.INFO['ExAC_AC_AFR']/record.INFO['ExAC_AN_AFR'] # African
             current_exac_amr = record.INFO['ExAC_AC_AMR']/record.INFO['ExAC_AN_AMR'] # Latino
             current_exac_oth = record.INFO['ExAC_AC_OTH']/record.INFO['ExAC_AN_OTH'] # Other
-
-
+        else:
+            current_exac_af,current_exac_eas,current_exac_nfe = '','',''
+            current_exac_fin,current_exac_sas,current_exac_afr = '','',''
+            current_exac_amr,current_exac_oth = '',''
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
