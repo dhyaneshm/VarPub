@@ -99,6 +99,7 @@ def main(argv):
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
+            print record.INFO['ExAC_AC_Adj'] + " " + record.INFO['ExAC_AN_Adj']
             current_exac_af = float(record.INFO['ExAC_AC_Adj'])/float(record.INFO['ExAC_AN_Adj']) # Total adjusted
             current_exac_eas = float(record.INFO['ExAC_AC_EAS'])/float(record.INFO['ExAC_AN_EAS']) # East Asians
             current_exac_nfe = float(record.INFO['ExAC_AC_NFE'])/float(record.INFO['ExAC_AN_NFE']) # NonFin Eur
