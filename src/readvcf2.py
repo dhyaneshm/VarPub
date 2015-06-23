@@ -98,7 +98,7 @@ def main(argv):
         current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
 
         # check if the variant is in ExAC annotated
-        if any("ExAC" in s for s in record.INFP):
+        if any("ExAC" in s for s in record.INFO):
             current_exac_af = record.INFO['ExAC_AC_Adj']/record.INFO['ExAC_AN_Adj'] # Total adjusted
             current_exac_eas = record.INFO['ExAC_AC_EAS']/record.INFO['ExAC_AN_EAS'] # East Asians
             current_exac_nfe = record.INFO['ExAC_AC_NFE']/record.INFO['ExAC_AN_NFE'] # NonFin Eur
