@@ -94,8 +94,8 @@ def main(argv):
         current_alt = ','.join(str(v) for v in record.ALT)
         #current_alt_array = current_alt.split(","
         current_af = ','.join(str(v) for v in record.INFO['AF'])
-        current_het_nfe = ','.join(str(v) for v in record.INFO['Het_NFE'])
-        current_hom_nfe = ','.join(str(v) for v in record.INFO['Hom_NFE'])
+        current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
+        current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFP):
