@@ -83,7 +83,9 @@ def main(argv):
 
     outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "HETEUR\tHOMEUR\tCADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
+            #"HETEUR\tHOMEUR\t
+            "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
+            "CADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
             "FATHMM\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
@@ -94,20 +96,22 @@ def main(argv):
         current_alt = ','.join(str(v) for v in record.ALT)
         #current_alt_array = current_alt.split(","
         current_af = ','.join(str(v) for v in record.INFO['AF'])
-        current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
-        current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
+        current_het_nfe = ''
+        current_hom_nfe = ''
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
             print record.INFO['ExAC_AC_Adj'] + " " + record.INFO['ExAC_AN_Adj']
-            current_exac_af = float(record.INFO['ExAC_AC_Adj'])/float(record.INFO['ExAC_AN_Adj']) # Total adjusted
-            current_exac_eas = float(record.INFO['ExAC_AC_EAS'])/float(record.INFO['ExAC_AN_EAS']) # East Asians
-            current_exac_nfe = float(record.INFO['ExAC_AC_NFE'])/float(record.INFO['ExAC_AN_NFE']) # NonFin Eur
-            current_exac_fin = float(record.INFO['ExAC_AC_FIN'])/float(record.INFO['ExAC_AN_FIN']) # Fin Eur
-            current_exac_sas = float(record.INFO['ExAC_AC_SAS'])/float(record.INFO['ExAC_AN_SAS']) # South Asian
-            current_exac_afr = float(record.INFO['ExAC_AC_AFR'])/float(record.INFO['ExAC_AN_AFR']) # African
-            current_exac_amr = float(record.INFO['ExAC_AC_AMR'])/float(record.INFO['ExAC_AN_AMR']) # Latino
-            current_exac_oth = float(record.INFO['ExAC_AC_OTH'])/float(record.INFO['ExAC_AN_OTH']) # Other
+            current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
+            current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
+            current_exac_af = float(record.INFO['ExAC_AC_Adj'][0])/float(record.INFO['ExAC_AN_Adj'][0]) # Total adjusted
+            current_exac_eas = float(record.INFO['ExAC_AC_EAS'][0])/float(record.INFO['ExAC_AN_EAS'][0]) # East Asians
+            current_exac_nfe = float(record.INFO['ExAC_AC_NFE'][0])/float(record.INFO['ExAC_AN_NFE'][0]) # NonFin Eur
+            current_exac_fin = float(record.INFO['ExAC_AC_FIN'][0])/float(record.INFO['ExAC_AN_FIN'][0]) # Fin Eur
+            current_exac_sas = float(record.INFO['ExAC_AC_SAS'][0])/float(record.INFO['ExAC_AN_SAS'][0]) # South Asian
+            current_exac_afr = float(record.INFO['ExAC_AC_AFR'][0])/float(record.INFO['ExAC_AN_AFR'][0]) # African
+            current_exac_amr = float(record.INFO['ExAC_AC_AMR'][0])/float(record.INFO['ExAC_AN_AMR'][0]) # Latino
+            current_exac_oth = float(record.INFO['ExAC_AC_OTH'][0])/float(record.INFO['ExAC_AN_OTH'][0]) # Other
         else:
             current_exac_af,current_exac_eas,current_exac_nfe = '','',''
             current_exac_fin,current_exac_sas,current_exac_afr = '','',''
@@ -171,7 +175,10 @@ def main(argv):
         out_str = [ "chr"+current_chr, str(current_pos), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
-                current_eur_maf, current_ea_maf, current_het_nfe, current_hom_nfe,
+                current_eur_maf, current_ea_maf,
+                #current_het_nfe, current_hom_nfe,
+                current_exac_af, current_exac_eas, current_exac_nfe, current_exac_fin, current_exac_sas,
+                current_exac_afr, current_exac_amr, current_exac_oth,
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 fathmm_score ]
         out_str = [x or '.' for x in out_str]
