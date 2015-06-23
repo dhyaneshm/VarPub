@@ -99,14 +99,14 @@ def main(argv):
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
-            current_exac_af = record.INFO['ExAC_AC_Adj']/record.INFO['ExAC_AN_Adj'] # Total adjusted
-            current_exac_eas = record.INFO['ExAC_AC_EAS']/record.INFO['ExAC_AN_EAS'] # East Asians
-            current_exac_nfe = record.INFO['ExAC_AC_NFE']/record.INFO['ExAC_AN_NFE'] # NonFin Eur
-            current_exac_fin = record.INFO['ExAC_AC_FIN']/record.INFO['ExAC_AN_FIN'] # Fin Eur
-            current_exac_sas = record.INFO['ExAC_AC_SAS']/record.INFO['ExAC_AN_SAS'] # South Asian
-            current_exac_afr = record.INFO['ExAC_AC_AFR']/record.INFO['ExAC_AN_AFR'] # African
-            current_exac_amr = record.INFO['ExAC_AC_AMR']/record.INFO['ExAC_AN_AMR'] # Latino
-            current_exac_oth = record.INFO['ExAC_AC_OTH']/record.INFO['ExAC_AN_OTH'] # Other
+            current_exac_af = float(record.INFO['ExAC_AC_Adj'])/float(record.INFO['ExAC_AN_Adj']) # Total adjusted
+            current_exac_eas = float(record.INFO['ExAC_AC_EAS'])/float(record.INFO['ExAC_AN_EAS']) # East Asians
+            current_exac_nfe = float(record.INFO['ExAC_AC_NFE'])/float(record.INFO['ExAC_AN_NFE']) # NonFin Eur
+            current_exac_fin = float(record.INFO['ExAC_AC_FIN'])/float(record.INFO['ExAC_AN_FIN']) # Fin Eur
+            current_exac_sas = float(record.INFO['ExAC_AC_SAS'])/float(record.INFO['ExAC_AN_SAS']) # South Asian
+            current_exac_afr = float(record.INFO['ExAC_AC_AFR'])/float(record.INFO['ExAC_AN_AFR']) # African
+            current_exac_amr = float(record.INFO['ExAC_AC_AMR'])/float(record.INFO['ExAC_AN_AMR']) # Latino
+            current_exac_oth = float(record.INFO['ExAC_AC_OTH'])/float(record.INFO['ExAC_AN_OTH']) # Other
         else:
             current_exac_af,current_exac_eas,current_exac_nfe = '','',''
             current_exac_fin,current_exac_sas,current_exac_afr = '','',''
