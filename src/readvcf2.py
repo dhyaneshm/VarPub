@@ -81,7 +81,7 @@ def main(argv):
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
     fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
 
-    outputfile.write("chr\tpos\tref\talt\tannotation\tgene_name\tlof" \
+    outputfile.write("chr\tpos\tid\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
             #"HETEUR\tHOMEUR\t
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
@@ -91,6 +91,7 @@ def main(argv):
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
         current_chr = record.CHROM
+        current_id = record.ID
         current_pos = record.POS
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
@@ -101,7 +102,7 @@ def main(argv):
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
-            print record.INFO['ExAC_AC_Adj'] + " " + record.INFO['ExAC_AN_Adj']
+            print str(record.INFO['ExAC_AN_Adj'])
             current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
             current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
             current_exac_af = float(record.INFO['ExAC_AC_Adj'][0])/float(record.INFO['ExAC_AN_Adj'][0]) # Total adjusted
@@ -172,7 +173,7 @@ def main(argv):
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
 
-        out_str = [ "chr"+current_chr, str(current_pos), current_ref, current_alt,
+        out_str = [ "chr"+current_chr, str(current_pos), current_id, current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf,
