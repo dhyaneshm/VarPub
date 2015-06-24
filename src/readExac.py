@@ -112,14 +112,14 @@ def main(argv):
         exac_amr = [float(x) / float(record.INFO['AN_AMR']) for x in record.INFO['AC_AMR']] # Latino
         exac_oth = [float(x) / float(record.INFO['AN_OTH']) for x in record.INFO['AC_OTH']] # Other
 
-        current_exac_af = ','.join(exac_af)
-        current_exac_eas = ','.join(exac_eas)
-        current_exac_nfe = ','.join(exac_nfe)
-        current_exac_fin = ','.join(exac_fin)
-        current_exac_sas = ','.join(exac_sas)
-        current_exac_afr = ','.join(exac_afr)
-        current_exac_amr = ','.join(exac_amr)
-        current_exac_oth = ','.join(exac_oth)
+        current_exac_af = ','.join(str(x) for x in exac_af)
+        current_exac_eas = ','.join(str(x) for x in exac_eas)
+        current_exac_nfe = ','.join(str(x) for x in exac_nfe)
+        current_exac_fin = ','.join(str(x) for x in exac_fin)
+        current_exac_sas = ','.join(str(x) for x in exac_sas)
+        current_exac_afr = ','.join(str(x) for x in exac_afr)
+        current_exac_amr = ','.join(str(x) for x in exac_amr)
+        current_exac_oth = ','.join(str(x) for x in exac_oth)
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
