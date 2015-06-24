@@ -103,14 +103,23 @@ def main(argv):
         # check if the variant is in ExAC annotated
         current_het_nfe = ','.join(str(v) for v in record.INFO['AC_Het'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['AC_Hom'])
-        current_exac_af = float(record.INFO['AC_Adj'])/float(record.INFO['AN_Adj']) # Total adjusted
-        current_exac_eas = float(record.INFO['AC_EAS'])/float(record.INFO['AN_EAS']) # East Asians
-        current_exac_nfe = float(record.INFO['AC_NFE'])/float(record.INFO['AN_NFE']) # NonFin Eur
-        current_exac_fin = float(record.INFO['AC_FIN'])/float(record.INFO['AN_FIN']) # Fin Eur
-        current_exac_sas = float(record.INFO['AC_SAS'])/float(record.INFO['AN_SAS']) # South Asian
-        current_exac_afr = float(record.INFO['AC_AFR'])/float(record.INFO['AN_AFR']) # African
-        current_exac_amr = float(record.INFO['AC_AMR'])/float(record.INFO['AN_AMR']) # Latino
-        current_exac_oth = float(record.INFO['AC_OTH'])/float(record.INFO['AN_OTH']) # Other
+        exac_af = [float(x) / float(record.INFO['AN_Adj']) for x in record.INFO['AC_Adj']] # Total adjusted
+        exac_eas = [float(x) / float(record.INFO['AN_EAS']) for x in record.INFO['AC_EAS']] # East Asians
+        exac_nfe = [float(x) / float(record.INFO['AN_NFE']) for x in record.INFO['AC_NFE']] # NonFin Eur
+        exac_fin = [float(x) / float(record.INFO['AN_FIN']) for x in record.INFO['AC_FIN']] # Fin Eur
+        exac_sas = [float(x) / float(record.INFO['AN_SAS']) for x in record.INFO['AC_SAS']] # South Asian
+        exac_afr = [float(x) / float(record.INFO['AN_AFR']) for x in record.INFO['AC_AFR']] # African
+        exac_amr = [float(x) / float(record.INFO['AN_AMR']) for x in record.INFO['AC_AMR']] # Latino
+        exac_oth = [float(x) / float(record.INFO['AN_OTH']) for x in record.INFO['AC_OTH']] # Other
+
+        current_exac_af = ','.join(exac_af)
+        current_exac_eas = ','.join(exac_eas)
+        current_exac_nfe = ','.join(exac_nfe)
+        current_exac_fin = ','.join(exac_fin)
+        current_exac_sas = ','.join(exac_sas)
+        current_exac_afr = ','.join(exac_afr)
+        current_exac_amr = ','.join(exac_amr)
+        current_exac_oth = ','.join(exac_oth)
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
