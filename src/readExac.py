@@ -59,6 +59,13 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 
     return fathmm_score
 
+def getAF(ac, af)
+    if(af>0):
+        newlist = [float(x) / float(an) for x in ac]
+    else:
+        newlist = 'NA'
+    return newlist
+
 # MAIN
 
 def main(argv):
@@ -103,14 +110,15 @@ def main(argv):
         # check if the variant is in ExAC annotated
         current_het_nfe = ','.join(str(v) for v in record.INFO['AC_Het'])
         current_hom_nfe = ','.join(str(v) for v in record.INFO['AC_Hom'])
-        exac_af = [float(x) / float(record.INFO['AN_Adj']) for x in record.INFO['AC_Adj']] # Total adjusted
-        exac_eas = [float(x) / float(record.INFO['AN_EAS']) for x in record.INFO['AC_EAS']] # East Asians
-        exac_nfe = [float(x) / float(record.INFO['AN_NFE']) for x in record.INFO['AC_NFE']] # NonFin Eur
-        exac_fin = [float(x) / float(record.INFO['AN_FIN']) for x in record.INFO['AC_FIN']] # Fin Eur
-        exac_sas = [float(x) / float(record.INFO['AN_SAS']) for x in record.INFO['AC_SAS']] # South Asian
-        exac_afr = [float(x) / float(record.INFO['AN_AFR']) for x in record.INFO['AC_AFR']] # African
-        exac_amr = [float(x) / float(record.INFO['AN_AMR']) for x in record.INFO['AC_AMR']] # Latino
-        exac_oth = [float(x) / float(record.INFO['AN_OTH']) for x in record.INFO['AC_OTH']] # Other
+        #exac_af = [float(x) / float(record.INFO['AN_Adj']) for x in record.INFO['AC_Adj']] # Total adjusted
+        exac_af = getAF(record.INFO['AC_Adj'], record.INFO['AN_Adj']])
+        exac_eas = getAF(record.INFO['AC_EAS'], record.INFO['AN_EAS']])
+        exac_nfe = getAF(record.INFO['AC_NFE'], record.INFO['AN_NFE']])
+        exac_fin = getAF(record.INFO['AC_FIN'], record.INFO['AN_FIN']])
+        exac_sas = getAF(record.INFO['AC_SAS'], record.INFO['AN_SAS']])
+        exac_afr = getAF(record.INFO['AC_AFR'], record.INFO['AN_AFR']])
+        exac_amr = getAF(record.INFO['AC_AMR'], record.INFO['AN_AMR']])
+        exac_oth = getAF(record.INFO['AC_OTH'], record.INFO['AN_OTH']])
 
         current_exac_af = ','.join(str(x) for x in exac_af)
         current_exac_eas = ','.join(str(x) for x in exac_eas)
