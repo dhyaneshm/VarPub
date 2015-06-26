@@ -61,10 +61,11 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 
 def getAF(ac, an):
     if(float(an)>0):
-        newlist = [float(x) / float(an) for x in ac]
+        #newlist = [float(x) / float(an) for x in ac]
+        newlist = ac / an
     else:
         newlist = 'NA'
-    return newlist
+    return str(newlist)
 
 
 # MAIN
