@@ -59,7 +59,7 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 
     return fathmm_score
 
-def getAF(ac, an)
+def getAF(ac, an):
     if(float(an)>0):
         newlist = [float(x) / float(an) for x in ac]
     else:
