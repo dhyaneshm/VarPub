@@ -111,7 +111,7 @@ def main(argv):
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
-            print str(record.INFO['ExAC_AN_Adj']) + "\t" + str(record.INFO['ExAC_AN_Adj'][0])
+            print current_chr + "\t" + current_id + "\t" + current_ref + "/" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" + str(record.INFO['ExAC_AN_Adj'][0])
             current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
             current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
             current_exac_af = getAF(float(record.INFO['ExAC_AC_Adj'][0]),float(record.INFO['ExAC_AN_Adj'][0])) # Total adjusted
