@@ -46,6 +46,7 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
             cadd_polysift
 
 def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
+    current_chr = current_chr.translate(None, 'chr')
     data = fathmm_tbx.fetch(current_chr, current_pos-1, current_pos)
     fathmm_score = ''
     if data is not None:
@@ -68,6 +69,23 @@ def getAF(ac, an):
     else:
         newlist = 'NA'
     return str(newlist)
+
+# return index of the current alt allele from exac multiallelic data
+def getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt):
+    current_chr = current_chr.translate(None, 'chr')
+    data = exac_tbx.fetch(current_chr, current_pos-1, current_pos)
+    index = -2
+    exac_row = next(data, None)
+    if exac_row:
+        exac_alt_temp = exac_row.split("\t")[4]
+        exac_alt_row = exac_alt_temp.split(",")
+        indexlist = [i for i, s in enumerate(exac_alt_row) if current_alt is s]
+        index = indexlist[-1] if len(indexlist)==1 else -2
+        #print "\t\tT\t" + str(index)
+    else:
+        index = -2
+        #print "\t\tF\t" + str(index)
+    return index
 
 
 # MAIN
@@ -114,20 +132,22 @@ def main(argv):
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
             print current_chr + "\t" + current_id + "\t" + current_ref + ":" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" + str(record.INFO['ExAC_AN_Adj'])
-            current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
-            current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
-            current_exac_af = getAF(float(record.INFO['ExAC_AC_Adj'][0]),float(record.INFO['ExAC_AN_Adj'][0])) # Total adjusted
-            current_exac_eas = getAF(float(record.INFO['ExAC_AC_EAS'][0]),float(record.INFO['ExAC_AN_EAS'][0])) # East Asians
-            current_exac_nfe = getAF(float(record.INFO['ExAC_AC_NFE'][0]),float(record.INFO['ExAC_AN_NFE'][0])) # NonFin Eur
-            current_exac_fin = getAF(float(record.INFO['ExAC_AC_FIN'][0]),float(record.INFO['ExAC_AN_FIN'][0])) # Fin Eur
-            current_exac_sas = getAF(float(record.INFO['ExAC_AC_SAS'][0]),float(record.INFO['ExAC_AN_SAS'][0])) # South Asian
-            current_exac_afr = getAF(float(record.INFO['ExAC_AC_AFR'][0]),float(record.INFO['ExAC_AN_AFR'][0])) # African
-            current_exac_amr = getAF(float(record.INFO['ExAC_AC_AMR'][0]),float(record.INFO['ExAC_AN_AMR'][0])) # Latino
-            current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][0]),float(record.INFO['ExAC_AN_OTH'][0])) # Other
+            current_exac_index = getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt)
+            if(current_exac_index>-2):
+                current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
+                current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
+                current_exac_af = getAF(float(record.INFO['ExAC_AC_Adj'][0]),float(record.INFO['ExAC_AN_Adj'][0])) # Total adjusted
+                current_exac_eas = getAF(float(record.INFO['ExAC_AC_EAS'][0]),float(record.INFO['ExAC_AN_EAS'][0])) # East Asians
+                current_exac_nfe = getAF(float(record.INFO['ExAC_AC_NFE'][0]),float(record.INFO['ExAC_AN_NFE'][0])) # NonFin Eur
+                current_exac_fin = getAF(float(record.INFO['ExAC_AC_FIN'][0]),float(record.INFO['ExAC_AN_FIN'][0])) # Fin Eur
+                current_exac_sas = getAF(float(record.INFO['ExAC_AC_SAS'][0]),float(record.INFO['ExAC_AN_SAS'][0])) # South Asian
+                current_exac_afr = getAF(float(record.INFO['ExAC_AC_AFR'][0]),float(record.INFO['ExAC_AN_AFR'][0])) # African
+                current_exac_amr = getAF(float(record.INFO['ExAC_AC_AMR'][0]),float(record.INFO['ExAC_AN_AMR'][0])) # Latino
+                current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][0]),float(record.INFO['ExAC_AN_OTH'][0])) # Other
         else:
-            current_exac_af,current_exac_eas,current_exac_nfe = '','',''
-            current_exac_fin,current_exac_sas,current_exac_afr = '','',''
-            current_exac_amr,current_exac_oth = '',''
+            current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
+            current_exac_fin,current_exac_sas,current_exac_afr = 0,0,0
+            current_exac_amr,current_exac_oth = 0,0
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
@@ -184,7 +204,7 @@ def main(argv):
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
 
-        out_str = [ "chr"+current_chr, str(current_pos), current_id, current_ref, current_alt,
+        out_str = [ current_chr, str(current_pos), current_id, current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf,
