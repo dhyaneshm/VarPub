@@ -132,7 +132,7 @@ def main(argv):
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
-            print current_chr + "\t" + current_id + "\t" + current_ref + ":" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" + str(record.INFO['ExAC_AN_Adj'])
+            #print current_chr + "\t" + current_id + "\t" + current_ref + ":" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" + str(record.INFO['ExAC_AN_Adj'])
             current_exac_index = getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt)
             if(current_exac_index>-2):
                 current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
@@ -205,7 +205,7 @@ def main(argv):
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
 
-        out_str = [ current_chr, str(current_pos), current_id, current_ref, current_alt,
+        out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
                 current_aa_pos, cadd_polysift, current_af, current_gmaf,
                 current_eur_maf, current_ea_maf,
