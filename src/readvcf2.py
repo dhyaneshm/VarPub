@@ -65,7 +65,8 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 def getAF(ac, an):
     if(float(an)>0):
         #newlist = [float(x) / float(an) for x in ac]
-        newlist = ac / an
+        af_temp = ac / an
+        newlist = round(af_temp, 5)
     else:
         newlist = 'NA'
     return str(newlist)
@@ -137,14 +138,14 @@ def main(argv):
             if(current_exac_index>-2):
                 current_het_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Het'])
                 current_hom_nfe = ','.join(str(v) for v in record.INFO['ExAC_AC_Hom'])
-                current_exac_af = getAF(float(record.INFO['ExAC_AC_Adj'][0]),float(record.INFO['ExAC_AN_Adj'][0])) # Total adjusted
-                current_exac_eas = getAF(float(record.INFO['ExAC_AC_EAS'][0]),float(record.INFO['ExAC_AN_EAS'][0])) # East Asians
-                current_exac_nfe = getAF(float(record.INFO['ExAC_AC_NFE'][0]),float(record.INFO['ExAC_AN_NFE'][0])) # NonFin Eur
-                current_exac_fin = getAF(float(record.INFO['ExAC_AC_FIN'][0]),float(record.INFO['ExAC_AN_FIN'][0])) # Fin Eur
-                current_exac_sas = getAF(float(record.INFO['ExAC_AC_SAS'][0]),float(record.INFO['ExAC_AN_SAS'][0])) # South Asian
-                current_exac_afr = getAF(float(record.INFO['ExAC_AC_AFR'][0]),float(record.INFO['ExAC_AN_AFR'][0])) # African
-                current_exac_amr = getAF(float(record.INFO['ExAC_AC_AMR'][0]),float(record.INFO['ExAC_AN_AMR'][0])) # Latino
-                current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][0]),float(record.INFO['ExAC_AN_OTH'][0])) # Other
+                current_exac_af = getAF(float(record.INFO['ExAC_AC_Adj'][current_exac_index]),float(record.INFO['ExAC_AN_Adj'][-1])) # Total adjusted
+                current_exac_eas = getAF(float(record.INFO['ExAC_AC_EAS'][current_exac_index]),float(record.INFO['ExAC_AN_EAS'][-1])) # East Asians
+                current_exac_nfe = getAF(float(record.INFO['ExAC_AC_NFE'][current_exac_index]),float(record.INFO['ExAC_AN_NFE'][-1])) # NonFin Eur
+                current_exac_fin = getAF(float(record.INFO['ExAC_AC_FIN'][current_exac_index]),float(record.INFO['ExAC_AN_FIN'][-1])) # Fin Eur
+                current_exac_sas = getAF(float(record.INFO['ExAC_AC_SAS'][current_exac_index]),float(record.INFO['ExAC_AN_SAS'][-1])) # South Asian
+                current_exac_afr = getAF(float(record.INFO['ExAC_AC_AFR'][current_exac_index]),float(record.INFO['ExAC_AN_AFR'][-1])) # African
+                current_exac_amr = getAF(float(record.INFO['ExAC_AC_AMR'][current_exac_index]),float(record.INFO['ExAC_AN_AMR'][-1])) # Latino
+                current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][current_exac_index]),float(record.INFO['ExAC_AN_OTH'][-1])) # Other
         else:
             current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
             current_exac_fin,current_exac_sas,current_exac_afr = 0,0,0
