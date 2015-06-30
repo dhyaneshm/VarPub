@@ -109,6 +109,7 @@ def main(argv):
     cadd_tbx = pysam.TabixFile("data/whole_genome_SNVs_inclAnno.tsv.gz")
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
     fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
+    exac_tbx = pysam.TabixFile("data/ExAC.r0.3.sites.vep.vcf.gz")
 
     outputfile.write("chr\tpos\tid\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
