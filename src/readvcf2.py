@@ -22,10 +22,10 @@ import pysam
 #        self.msg = msg
 
 def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
+    current_chr = current_chr.translate(None, 'chr')
     data = cadd_tbx.fetch(current_chr, current_pos-1, current_pos)
     cadd_phred, cadd_priPhCons, cadd_GerpRS = '','',''
     cadd_polysift, cadd_test1, cadd_test2 = '','',''
-    current_chr = current_chr.translate(None, 'chr')
 
     if data is not None:
         for row in data:
