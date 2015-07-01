@@ -6,6 +6,9 @@ Copyright: 2015
 
 #!/usr/bin/python
 
+
+from utils import findlist
+
 import sys
 import os
 import argparse
@@ -76,18 +79,17 @@ def getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt):
     current_chr = current_chr.translate(None, 'chr')
     data = exac_tbx.fetch(current_chr, current_pos-1, current_pos)
     index = -2
-    exac_row = next(data, None)
-    if exac_row:
-        exac_alt_temp = exac_row.split("\t")[4]
-        exac_alt_row = exac_alt_temp.split(",")
-        indexlist = [i for i, s in enumerate(exac_alt_row) if current_alt is s]
-        index = indexlist[-1] if len(indexlist)==1 else -2
-        #print "\t\tT\t" + str(index)
+    row = 0
+    if data:
+        for exac_row in data:
+            exac_alt_temp = exac_row.split("\t")[4]
+            exac_alt_row = exac_alt_temp.split(",")
+            index = findlist(exac_alt_row, current_alt)
+            row += 1
     else:
         index = -2
-        #print "\t\tF\t" + str(index)
-    return index
 
+    return index
 
 # MAIN
 
@@ -130,6 +132,9 @@ def main(argv):
         current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ''
         current_hom_nfe = ''
+        current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
+        current_exac_fin,current_exac_sas,current_exac_afr = 0,0,0
+        current_exac_amr,current_exac_oth = 0,0
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -146,10 +151,6 @@ def main(argv):
                 current_exac_afr = getAF(float(record.INFO['ExAC_AC_AFR'][current_exac_index]),float(record.INFO['ExAC_AN_AFR'][-1])) # African
                 current_exac_amr = getAF(float(record.INFO['ExAC_AC_AMR'][current_exac_index]),float(record.INFO['ExAC_AN_AMR'][-1])) # Latino
                 current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][current_exac_index]),float(record.INFO['ExAC_AN_OTH'][-1])) # Other
-        else:
-            current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
-            current_exac_fin,current_exac_sas,current_exac_afr = 0,0,0
-            current_exac_amr,current_exac_oth = 0,0
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
@@ -157,8 +158,6 @@ def main(argv):
                 ("," not in current_ref and "," not in current_alt)) else False
         # mnp = map(labmda x, len(record.ALT)
         mnp = True if len(record.ALT) > 1 else False
-
-        #for current_alt in record.ALT:
 
         # VEP
         current_sift, current_polyphen, current_consequence, current_LOF = '','','',''
