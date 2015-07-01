@@ -62,9 +62,9 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 
     return fathmm_score
 
+# return allele frequency given the allele count and assuming allele number = (total allele number/2)
 def getAF(ac, an):
     if(float(an)>0):
-        #newlist = [float(x) / float(an) for x in ac]
         af_temp = ac / an
         newlist = round(af_temp, 5)
     else:
@@ -218,7 +218,6 @@ def main(argv):
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
-        #cadd_polysift = cadd
 
     outputfile.close()
 
