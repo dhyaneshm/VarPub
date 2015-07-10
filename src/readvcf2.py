@@ -69,7 +69,7 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 def getAF(ac, an):
     if(float(an)>0):
         af_temp = ac / an
-        newlist = round(af_temp, 5)
+        newlist = round(af_temp, 8)
     else:
         newlist = 'NA'
     return str(newlist)
@@ -169,7 +169,7 @@ def main(argv):
             current_consequence = csq[4]
             current_sift = csq[24].split("(")[0]
             current_polyphen = csq[25].split("(")[0]
-            current_gmaf, current_eur_maf, current_ea_maf =  csq[31], csq[34], csq[37]
+            current_gmaf, current_eur_maf, current_ea_maf =  csq[31], csq[35], csq[37]
             current_LOF = csq[48]
         else:
             current_feature, current_feature_type, current_consequence = '','',''

@@ -17,6 +17,8 @@ import getopt
 import vcf
 import array
 import pysam
+import threading
+import Queue
 
 #class Error(Exception):
 #    """Base-class for exceptions in this module."""
