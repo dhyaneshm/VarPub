@@ -92,7 +92,7 @@ def getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt):
     return index
 
 # main annotation function
-def annotator(record):
+def annotator(record,cadd_tbx,cadd_indel_tbx,fathmm_tbx,exac_tbx):
     current_chr = record.CHROM
     current_id = record.ID
     current_pos = record.POS

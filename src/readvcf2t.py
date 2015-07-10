@@ -58,7 +58,7 @@ def main(argv):
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
 
     for record in vcf_reader:
-        outputfile.write("\t".join(annotator(record)))
+        outputfile.write("\t".join(annotator(record,cadd_tbx,cadd_indel_tbx,fathmm_tbx,exac_tbx)))
         outputfile.write("\n")
 
     outputfile.close()
