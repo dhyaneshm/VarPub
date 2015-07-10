@@ -12,3 +12,4 @@ chr1.test2
 chr1i
 dump
 step3.vcf
+*.pyc

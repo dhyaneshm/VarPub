@@ -8,6 +8,7 @@ Copyright: 2015
 
 
 from utils import findlist
+from annotations import annotator
 
 import sys
 import os
@@ -30,7 +31,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--vcf", type=str, dest="vcf", help="Input variant file (vcf)", required=True)
-    parser.add_argument("-o", "--output", type=str, dest="out", help="Output file (tabular)", required=True)
+    parser.add_argument("-o", "--output", type=str, dest="out", help="Output file (default tabular)", required=True)
     parser.add_argument("-v", "--verbosity", action="count", default=0)
 
     args = parser.parse_args()
