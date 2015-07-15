@@ -113,6 +113,14 @@ def main(argv):
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
     fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
     exac_tbx = pysam.TabixFile("data/ExAC.r0.3.sites.vep.vcf.gz")
+    map_tbx = pysam.TabixFile("data/wgEncodeCrgMapabilityAlign100mer.bed.gz")
+    pfam_tbx = pysam.TabixFile("data/hg19.pfam.sorted.bed.gz")
+    prom_tbx = pysam.TabixFile("data/hg19.promoter.sorted.bed.gz")
+    enh_tbx = pysam.TabixFile("data/hg19.enhancer.sorted.bed.gz")
+    rmsk_tbx = pysam.TabixFile("data/hg19.rmsk.counts.bed.gz")
+    cpg_tbx = pysam.TabixFile("data/hg19.CpG.bed.gz")
+    clin_tbx = pysam.TabixFile("data/clinvar_20140303.bed.gz")
+    gwas_tbx = pysam.TabixFile("data/clinvar_20140303.bed.gz")
 
     outputfile.write("chr\tpos\tid\tref\talt\tannotation\tgene_name\tlof" \
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
@@ -204,6 +212,16 @@ def main(argv):
                 cadd_scores.append(cadd_phred_temp)
         cadd_phred = ",".join(mnp_cadds)
         # indel_str = "."
+
+        # INSER OTHER TABIX BASED ANNOTATORS BELOW
+        current_mapability = getTabixVal(map_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_pfam = getTabixVal(pfam_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_promoter = getTabixBool(prom_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_enhancer = getTabixBool(enh_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_rmsk = getTabixBool(rmsk_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_cpg = getTabixBool(cpg_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_clinvar = getTabixVal(clin_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_gwas = getTabixVal(gwas_tbx, current_chr, current_pos, current_ref, current_alt)
 
         out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
