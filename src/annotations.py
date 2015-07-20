@@ -45,8 +45,11 @@ def getTabixBool(input_tbx, current_chr, current_pos, current_ref, current_alt):
     value = '.'
 
     if data is not None:
-        return True
+        val = True
     else:
-        return False
+        val = False
 
+    val = "%s" % val
+
+    return val
 
