@@ -8,6 +8,7 @@ Copyright: 2015
 
 
 from utils import findlist
+from annotations import getTabixVal,getTabixBool
 
 import sys
 import os
@@ -126,8 +127,9 @@ def main(argv):
             "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
             #"HETEUR\tHOMEUR\t
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
-            "CADD\tmaxCADD\tpriPhCons\tGerpRS\t" \
-            "FATHMM\n")
+            "CADD\tmaxCADD\tpriPhCons\tGerpRS\tFATHMM\t" \
+            "Mapability\tPromoter\tEnhancer\tRepeat\tPfam\t" \
+            "CPG\tClinVar\tGWAS\n")
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
@@ -231,7 +233,8 @@ def main(argv):
                 current_exac_af, current_exac_eas, current_exac_nfe, current_exac_fin, current_exac_sas,
                 current_exac_afr, current_exac_amr, current_exac_oth,
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
-                fathmm_score ]
+                fathmm_score, current_mapability, current_promoter, current_enhancer,
+                current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
