@@ -28,13 +28,12 @@ def getTabixVal(input_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = input_tbx.fetch(current_chr, current_pos-1, current_pos)
     value = '.'
-
     if data is not None:
         for row in data:
             row_info = row.split("\t")
             value = row_info[3]
-    else:
-        value = '.'
+    #else:
+    #    value = '.'
 
     return value
 
@@ -42,14 +41,13 @@ def getTabixVal(input_tbx, current_chr, current_pos, current_ref, current_alt):
 def getTabixBool(input_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = input_tbx.fetch(current_chr, current_pos-1, current_pos)
-    value = '.'
+    val = '.'
 
     if data is not None:
-        val = True
-    else:
-        val = False
-
-    val = "%s" % val
+        for row in data:
+            print current_chr + ":" + str(current_pos) + ":" + str(row.split("\t"))
+            val = "T"
 
     return val
+
 
