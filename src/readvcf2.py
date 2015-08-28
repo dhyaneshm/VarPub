@@ -246,7 +246,7 @@ def main(argv):
         indel_str= ''
         mnp_cadds = []
         cadd_scores = []
-        fathmm_score = 0
+        fathmm_score = 0.0
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
                 (cadd_phred_temp, cadd_priPhCons, cadd_GerpRS, cadd_polysift) = \
@@ -276,7 +276,7 @@ def main(argv):
 
         out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
-                current_aa_pos, str(current_sift_score), str(current_polyphen_score), current_condel,  current_gmaf,
+                current_aa_pos, str(current_sift_score), str(current_polyphen_score), str(current_condel),  current_gmaf,
                 current_eur_maf, current_ea_maf,
                 #current_het_nfe, current_hom_nfe,
                 current_exac_af, current_exac_eas, current_exac_nfe, current_exac_fin, current_exac_sas,
