@@ -20,3 +20,5 @@ hg19.enhancer.bed
 hg19.pfam.bed
 hg19.promoter.bed
 *.bigWig
+clinvar.bed
+data
