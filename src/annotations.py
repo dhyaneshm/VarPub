@@ -40,7 +40,7 @@ def getTabixVal(input_tbx, current_chr, current_pos, current_ref, current_alt):
 def getTabixValCondel(input_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = input_tbx.fetch(current_chr, current_pos-1, current_pos)
-    value = 0
+    value = 0.0001
     if data is not None:
         for row in data:
             row_info = row.split("\t")
@@ -52,7 +52,7 @@ def getTabixValCondel(input_tbx, current_chr, current_pos, current_ref, current_
 def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = fathmm_tbx.fetch(current_chr, current_pos-1, current_pos)
-    fathmm_score = 0
+    fathmm_score = 0.0
     if data is not None:
         for row in data:
             row_info = row.split("\t")

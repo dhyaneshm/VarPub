@@ -1,6 +1,7 @@
 '''
-A tool to annotate and print variants in tabular format.
-Author: Khalid Mahmood (khalid.mahmood@unimelb.edu.au).
+A tool to annotate and print variants in tabular format
+Author: Khalid Mahmood
+Contact: khalid.mahmood@unimelb.edu.au
 Copyright: 2015
 '''
 
@@ -52,11 +53,11 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
 
 # return allele frequency given the allele count and assuming allele number = (total allele number/2)
 def getAF(ac, an):
-    if(float(an)>0):
+    if(float(an)>0.0):
         af_temp = ac / an
         newlist = round(af_temp, 8)
     else:
-        newlist = 'NA'
+        newlist = 0.0
     return str(newlist)
 
 # return index of the current alt allele from exac multiallelic data
@@ -139,9 +140,9 @@ def main(argv):
         # current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ''
         current_hom_nfe = ''
-        current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
-        current_exac_fin,current_exac_sas,current_exac_afr = 0,0,0
-        current_exac_amr,current_exac_oth = 0,0
+        current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
+        current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
+        current_exac_amr,current_exac_oth = 0.0,0.0
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -209,7 +210,7 @@ def main(argv):
 
         # VEP
         current_sift, current_polyphen, current_consequence, current_LOF = '','','',''
-        current_sift_score, current_polyphen_score = 1, 0
+        current_sift_score, current_polyphen_score = 0.9999, 0.0001
         current_gmaf, current_eur_maf, current_ea_maf = '','',''
         current_feature, current_feature_type = '',''
         if "CSQ" in record.INFO:
