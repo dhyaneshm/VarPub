@@ -8,13 +8,14 @@ Copyright: 2015
 
 
 from utils import findlist
-from annotations import getTabixVal,getTabixBool
+from annotations import getTabixVal,getTabixValCondel,getTabixBool,getfathmm
 
 import sys
 import os
 import argparse
 import getopt
 import vcf
+import re
 import array
 import pysam
 
@@ -44,27 +45,10 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
                     cadd_polysift = "del"
                 break
     else:
-        cadd_phred = '.'
+        cadd_phred = 'NA'
 
     return cadd_phred, cadd_priPhCons, cadd_GerpRS, \
             cadd_polysift
-
-def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
-    current_chr = current_chr.translate(None, 'chr')
-    data = fathmm_tbx.fetch(current_chr, current_pos-1, current_pos)
-    fathmm_score = ''
-    if data is not None:
-        for row in data:
-            row_info = row.split("\t")
-            fathmm_ref = row_info[3]
-            fathmm_alt = row_info[4]
-            if(fathmm_ref == current_ref and fathmm_alt == current_alt):
-                fathmm_score = row_info[7]
-                break
-    # else:
-    #    fathmm_score = ''
-
-    return fathmm_score
 
 # return allele frequency given the allele count and assuming allele number = (total allele number/2)
 def getAF(ac, an):
@@ -123,7 +107,7 @@ def main(argv):
     #    print "Starting ..."
     cadd_tbx = pysam.TabixFile("data/whole_genome_SNVs_inclAnno.tsv.gz")
     cadd_indel_tbx = pysam.TabixFile("data/InDels_inclAnno.tsv.gz")
-    fathmm_tbx = pysam.TabixFile("data/fathmm-MKL_Current_zerobased.tab.gz")
+    fathmm_tbx = pysam.TabixFile("data/dbNSFP.fathmmW.bed.gz")
     exac_tbx = pysam.TabixFile("data/ExAC.r0.3.sites.vep.vcf.gz")
     map_tbx = pysam.TabixFile("data/wgEncodeCrgMapabilityAlign100mer.bed.gz")
     pfam_tbx = pysam.TabixFile("data/hg19.pfam.sorted.bed.gz")
@@ -133,9 +117,11 @@ def main(argv):
     cpg_tbx = pysam.TabixFile("data/hg19.CpG.bed.gz")
     clin_tbx = pysam.TabixFile("data/clinvar_20140303.bed.gz")
     gwas_tbx = pysam.TabixFile("data/clinvar_20140303.bed.gz")
+    condel_tbx = pysam.TabixFile("data/fannsdb.small.bed.gz")
 
     outputfile.write("chr\tpos\tid\tref\talt\tannotation\tgene_name\tlof" \
-            "\texon\taa_pos\tpoly/sift\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
+            #"\texon\taa_pos\tpoly/sift\tSIFT\tPOLYPHEN\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
+            "\texon\taa_pos\tSIFT\tPOLYPHEN\tCONDEL\tGMAF\t1kgEMAF\tESPEMAF\t" \
             #"HETEUR\tHOMEUR\t
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
             "CADD\tmaxCADD\tpriPhCons\tGerpRS\tFATHMM\t" \
@@ -150,7 +136,7 @@ def main(argv):
         current_ref = record.REF
         current_alt = ','.join(str(v) for v in record.ALT)
         #current_alt_array = current_alt.split(","
-        current_af = ','.join(str(v) for v in record.INFO['AF'])
+        # current_af = ','.join(str(v) for v in record.INFO['AF'])
         current_het_nfe = ''
         current_hom_nfe = ''
         current_exac_af,current_exac_eas,current_exac_nfe = 0,0,0
@@ -223,16 +209,25 @@ def main(argv):
 
         # VEP
         current_sift, current_polyphen, current_consequence, current_LOF = '','','',''
+        current_sift_score, current_polyphen_score = 1, 0
         current_gmaf, current_eur_maf, current_ea_maf = '','',''
         current_feature, current_feature_type = '',''
         if "CSQ" in record.INFO:
             csq = record.INFO['CSQ'][0].split('|')
             current_feature, current_feature_type = csq[2], csq[3]
             current_consequence = csq[4]
-            current_sift = csq[24].split("(")[0]
-            current_polyphen = csq[25].split("(")[0]
+
+            #print csq[24] + "-" + csq[25]
+            current_sift = csq[23]
+            current_polyphen = csq[24]
+            if ( len(current_sift) > 0):
+                current_sift_score = re.findall(r'[0-9.]+', current_sift)[0]
+            if ( len(current_polyphen) > 0):
+                current_polyphen_score = re.findall(r'[0-9.]+', current_polyphen)[0]
+
+
             current_gmaf, current_eur_maf, current_ea_maf =  csq[31], csq[35], csq[37]
-            current_LOF = csq[48]
+            #current_LOF = csq[48]
         else:
             current_feature, current_feature_type, current_consequence = '','',''
             current_sift, current_polyphen, current_eur_maf = '','',''
@@ -242,7 +237,7 @@ def main(argv):
         ann = record.INFO['ANN'][0].split('|')
         annotation = ann[1]
         #   GENE INFORMATION
-        current_gene, current_exon, current_aa_pos = ann[3], ann[8], ann[13]
+        current_gene, current_exon, current_aa_pos = ann[3], ann[8], ann[10]
 
         #CADD SNP
         cadd_phred_temp = ''
@@ -250,7 +245,7 @@ def main(argv):
         indel_str= ''
         mnp_cadds = []
         cadd_scores = []
-        fathmm_score = ''
+        fathmm_score = 0
         for alt in record.ALT:
             if(len(current_ref) == 1 and len(alt) == 1):
                 (cadd_phred_temp, cadd_priPhCons, cadd_GerpRS, cadd_polysift) = \
@@ -276,10 +271,11 @@ def main(argv):
         current_cpg = getTabixBool(cpg_tbx, current_chr, current_pos, current_ref, current_alt)
         current_clinvar = getTabixVal(clin_tbx, current_chr, current_pos, current_ref, current_alt)
         current_gwas = getTabixVal(gwas_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_condel = getTabixValCondel(condel_tbx, current_chr, current_pos, current_ref, current_alt)
 
         out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
-                current_aa_pos, cadd_polysift, current_af, current_gmaf,
+                current_aa_pos, str(current_sift_score), str(current_polyphen_score), current_condel,  current_gmaf,
                 current_eur_maf, current_ea_maf,
                 #current_het_nfe, current_hom_nfe,
                 current_exac_af, current_exac_eas, current_exac_nfe, current_exac_fin, current_exac_sas,

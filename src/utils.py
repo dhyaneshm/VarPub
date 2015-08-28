@@ -2,7 +2,7 @@
 
 import sys
 import os
-import pybedtools
+#import pybedtools
 
 def findlist(input_list, a):
     result = []
