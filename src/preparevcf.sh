@@ -74,3 +74,5 @@ mv $GATKSNPS.temp $GATKSNPSPASS
 zless $GATKINDELSPASS | sed 's/ID=AD,Number=R/ID=AD,Number=./' > $GATKINDELS.temp
 mv $GATKINDELS.temp $GATKINDELSPASS
 
+# TODO
+
