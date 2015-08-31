@@ -299,9 +299,9 @@ def main(argv):
                 mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
         # filters
-        if( (current_exac_af <= args.exac_af_threshold) &&
-                (current_exac_nfe <= args.exac_eur_threshold) &&
-                (current_exac_fin <= args.exac_eur_threshold)):
+        if( (current_exac_af <= args.exac_af_threshold) and
+            (current_exac_nfe <= args.exac_eur_threshold) and
+            (current_exac_fin <= args.exac_eur_threshold)):
             outputfile.write("\t".join(out_str))
             outputfile.write("\n")
 
