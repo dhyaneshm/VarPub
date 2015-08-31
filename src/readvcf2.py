@@ -165,7 +165,7 @@ def main(argv):
             len_ac_oth = len(record.INFO['ExAC_AC_OTH'])
 
             current_exac_index, exac_filter = getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt)
-            exac_flag = "True" + exac_filter
+            exac_flag = "True" + ":" + exac_filter
 
             #print current_chr + "\t" + str(current_id) + "\t" + current_ref + ":" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" \
             #                + str(record.INFO['ExAC_AN_Adj'] ) + str(current_exac_index)
