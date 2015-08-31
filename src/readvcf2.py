@@ -67,12 +67,14 @@ def getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt):
     index = -2
     row = 0
     found = False
+    exac_filter_return = ""
     if data:
         for exac_row in data:
             exac_pos = int(exac_row.split("\t")[1])
 
             exac_ref_temp = exac_row.split("\t")[3]
             exac_alt_temp = exac_row.split("\t")[4]
+            exac_filter = exac_row.split("\t")[6]
 
             exac_alt_row = exac_alt_temp.split(",")
             exac_ref_row = exac_ref_temp.split(",")
@@ -80,13 +82,14 @@ def getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt):
             #if(current_pos == exac_pos and current_ref in exac_ref_row and \
             if(current_pos == exac_pos and current_alt in exac_alt_row ):
                 index = exac_alt_row.index(current_alt)
+                exac_filter_return = exac_filter
                 row += 1
                 break
     else:
         index = -2
 
     #print "Row = " + str(row) + " " + str(found)
-    return index
+    return index, exac_filter_return
 
 # MAIN
 
@@ -148,7 +151,7 @@ def main(argv):
         current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
         current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
         current_exac_amr,current_exac_oth = 0.0,0.0
-        exac_flag = "True"
+        exac_flag = "."
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -160,7 +163,10 @@ def main(argv):
             len_ac_afr = len(record.INFO['ExAC_AC_AFR'])
             len_ac_amr = len(record.INFO['ExAC_AC_AMR'])
             len_ac_oth = len(record.INFO['ExAC_AC_OTH'])
-            current_exac_index = getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt)
+
+            current_exac_index, exac_filter = getexacallele(exac_tbx, current_chr, current_pos, current_ref, current_alt)
+            exac_flag = "True" + exac_filter
+
             #print current_chr + "\t" + str(current_id) + "\t" + current_ref + ":" + current_alt + str(record.INFO['ExAC_AN_Adj']) + "\t" \
             #                + str(record.INFO['ExAC_AN_Adj'] ) + str(current_exac_index)
             if(current_exac_index>-2):
@@ -299,9 +305,7 @@ def main(argv):
                 mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
         # filters
-        if( (current_exac_af <= args.exac_af_threshold) and
-            (current_exac_nfe <= args.exac_eur_threshold) and
-            (current_exac_fin <= args.exac_eur_threshold)):
+        if( (current_exac_af <= args.exac_af_threshold) ):
             outputfile.write("\t".join(out_str))
             outputfile.write("\n")
 
