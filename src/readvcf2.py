@@ -95,6 +95,10 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--vcf", type=str, dest="vcf", help="Input variant file (vcf)", required=True)
     parser.add_argument("-o", "--output", type=str, dest="out", help="Output file (tabular)", required=True)
+    parser.add_argument("-X", "--exac", type=str, dest="exac_af_threshold", help="ExAC All threshold",
+            default=100, required=False)
+    parser.add_argument("-XE", "--exacEUR", type=str, dest="exac_eur_threshold", help="ExAC European threshold",
+            default=100, required=False)
     parser.add_argument("-v", "--verbosity", action="count", default=0)
 
     args = parser.parse_args()
@@ -294,8 +298,12 @@ def main(argv):
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
                 mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
-        outputfile.write("\t".join(out_str))
-        outputfile.write("\n")
+        # filters
+        if( (current_exac_af <= args.exac_af_threshold) &&
+                (current_exac_nfe <= args.exac_eur_threshold) &&
+                (current_exac_fin <= args.exac_eur_threshold)):
+            outputfile.write("\t".join(out_str))
+            outputfile.write("\n")
 
     outputfile.close()
 
