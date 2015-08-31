@@ -148,7 +148,7 @@ def main(argv):
         current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
         current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
         current_exac_amr,current_exac_oth = 0.0,0.0
-        exac_flag = "T"
+        exac_flag = "True"
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -209,7 +209,7 @@ def main(argv):
             current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
             current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
             current_exac_amr,current_exac_oth = 0.0,0.0
-            exac_flag = "F"
+            exac_flag = "False"
 
 
         # CHECK INDEL AND MNP
