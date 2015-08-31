@@ -127,7 +127,8 @@ def main(argv):
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
             "CADD\tmaxCADD\tpriPhCons\tGerpRS\tFATHMM\t" \
             "Mapability\tPromoter\tEnhancer\tRepeat\tPfam\t" \
-            "CPG\tClinVar\tGWAS\tMNP_FLAG\n")
+            "CPG\tClinVar\tGWAS\tMNP_FLAG\tExAC_FLAG\n")
+
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
     for record in vcf_reader:
@@ -143,6 +144,7 @@ def main(argv):
         current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
         current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
         current_exac_amr,current_exac_oth = 0.0,0.0
+        exac_flag = "T"
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -203,6 +205,7 @@ def main(argv):
             current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
             current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
             current_exac_amr,current_exac_oth = 0.0,0.0
+            exac_flag = "F"
 
 
         # CHECK INDEL AND MNP
@@ -287,8 +290,9 @@ def main(argv):
                 str(current_exac_af), str(current_exac_eas), str(current_exac_nfe), str(current_exac_fin),
                 str(current_exac_sas), str(current_exac_afr), str(current_exac_amr), str(current_exac_oth),
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
-                fathmm_score, str(current_mapability), current_promoter, current_enhancer,
-                current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas, mnpflag]
+                str(fathmm_score), str(current_mapability), current_promoter, current_enhancer,
+                current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
+                mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
         outputfile.write("\t".join(out_str))
         outputfile.write("\n")
