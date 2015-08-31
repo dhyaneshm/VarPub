@@ -199,6 +199,11 @@ def main(argv):
                     current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][current_exac_index]),float(record.INFO['ExAC_AN_OTH'][-1]))
                 else:
                     current_exac_oth = getAF(float(record.INFO['ExAC_AC_OTH'][-1]),float(record.INFO['ExAC_AN_OTH'][-1]))
+        else:
+            current_exac_af,current_exac_eas,current_exac_nfe = 0.0,0.0,0.0
+            current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
+            current_exac_amr,current_exac_oth = 0.0,0.0
+
 
         # CHECK INDEL AND MNP
         #print current_ref + ":" + current_alt
@@ -279,8 +284,8 @@ def main(argv):
                 current_aa_pos, str(current_sift_score), str(current_polyphen_score), str(current_condel),  current_gmaf,
                 current_eur_maf, current_ea_maf,
                 #current_het_nfe, current_hom_nfe,
-                current_exac_af, current_exac_eas, current_exac_nfe, current_exac_fin, current_exac_sas,
-                current_exac_afr, current_exac_amr, current_exac_oth,
+                str(current_exac_af), str(current_exac_eas), str(current_exac_nfe), str(current_exac_fin),
+                str(current_exac_sas), str(current_exac_afr), str(current_exac_amr), str(current_exac_oth),
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 fathmm_score, str(current_mapability), current_promoter, current_enhancer,
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas, mnpflag]
