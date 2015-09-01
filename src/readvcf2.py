@@ -54,8 +54,9 @@ def getcadd(cadd_tbx, current_chr, current_pos, current_ref, current_alt):
 # return allele frequency given the allele count and assuming allele number = (total allele number/2)
 def getAF(ac, an):
     if(float(an)>0.0):
-        af_temp = ac / an
-        newlist = round(af_temp, 8)
+        af_temp = float(ac) / an
+        #newlist = round(af_temp, 8)
+        newlist = af_temp
     else:
         newlist = 0.0
     return str(newlist)
