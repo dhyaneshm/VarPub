@@ -305,8 +305,13 @@ def main(argv):
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
                 mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
-        # filters
-        if( (current_exac_af <= args.exac_af_threshold) ):
+
+        # filters ExAC ALL
+        if( 'PASS' in exac_flag ): # IF IT IS A PASS ExAC SITE - FILTER ON AF
+            if( (current_exac_af <= args.exac_af_threshold) ):
+                outputfile.write("\t".join(out_str))
+                outputfile.write("\n")
+        else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
             outputfile.write("\t".join(out_str))
             outputfile.write("\n")
 
