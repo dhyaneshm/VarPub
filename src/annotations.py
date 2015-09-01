@@ -76,4 +76,13 @@ def getTabixBool(input_tbx, current_chr, current_pos, current_ref, current_alt):
 
     return val
 
+def adjust_scores(condel, sift, polyphen, fathmm, annotation):
+
+    if('stop_lost' in annotation OR 'stop_gained' in annotation):
+        condel = 0.9999
+        sift = 0.0001
+        polyphen = 0.9999
+        fathmm = 0.9999
+
+    return condel, sift, polyphen, fathmm
 

@@ -9,7 +9,8 @@ Copyright: 2015
 
 
 from utils import findlist
-from annotations import getTabixVal,getTabixValCondel,getTabixBool,getfathmm
+from annotations import getTabixVal,getTabixValCondel,getTabixBool
+from annotations import getfathmm,adjust_scores
 
 import sys
 import os
@@ -292,6 +293,10 @@ def main(argv):
         current_clinvar = getTabixVal(clin_tbx, current_chr, current_pos, current_ref, current_alt)
         current_gwas = getTabixVal(gwas_tbx, current_chr, current_pos, current_ref, current_alt)
         current_condel = getTabixValCondel(condel_tbx, current_chr, current_pos, current_ref, current_alt)
+
+        # RESCORE SCORES FOR PROTEIN TRUNCATING MUTATIONS
+        (current_condel, current_sift, current_polyphen, fathmm_score) = adjust_scores(current_condel, current_sift, \
+                current_polyphen, fathmm_score, annotation)
 
         out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
