@@ -131,7 +131,7 @@ def main(argv):
 
     outputfile.write("chr\tpos\tid\tref\talt\tannotation\tgene_name\tlof" \
             #"\texon\taa_pos\tpoly/sift\tSIFT\tPOLYPHEN\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
-            "\texon\taa_pos\tSIFT\tPOLYPHEN\tCONDEL\tGMAF\t1kgEMAF\tESPEMAF\t" \
+            "\texon\taa_pos\tSIFT\tPOLYPHEN\tCONDEL\tAF\tGMAF\t1kgEMAF\tESPEMAF\t" \
             #"HETEUR\tHOMEUR\t
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
             "CADD\tmaxCADD\tpriPhCons\tGerpRS\tFATHMM\t" \
@@ -293,6 +293,7 @@ def main(argv):
         current_clinvar = getTabixVal(clin_tbx, current_chr, current_pos, current_ref, current_alt)
         current_gwas = getTabixVal(gwas_tbx, current_chr, current_pos, current_ref, current_alt)
         current_condel = getTabixValCondel(condel_tbx, current_chr, current_pos, current_ref, current_alt)
+        current_AF = record.INFO['AF']
 
         # RESCORE SCORES FOR PROTEIN TRUNCATING MUTATIONS
         (current_condel, current_sift, current_polyphen, fathmm_score) = adjust_scores(current_condel, current_sift, \
@@ -300,8 +301,8 @@ def main(argv):
 
         out_str = [ current_chr, str(current_pos), str(current_id), current_ref, current_alt,
                 annotation, current_gene, current_LOF, current_exon,
-                current_aa_pos, str(current_sift_score), str(current_polyphen_score), str(current_condel),  current_gmaf,
-                current_eur_maf, current_ea_maf,
+                current_aa_pos, str(current_sift_score), str(current_polyphen_score), str(current_condel), str(current_AF),
+                current_gmaf, current_eur_maf, current_ea_maf,
                 #current_het_nfe, current_hom_nfe,
                 str(current_exac_af), str(current_exac_eas), str(current_exac_nfe), str(current_exac_fin),
                 str(current_exac_sas), str(current_exac_afr), str(current_exac_amr), str(current_exac_oth),
