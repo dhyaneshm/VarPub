@@ -317,6 +317,10 @@ def main(argv):
             if( (current_exac_af <= args.exac_af_threshold) ):
                 outputfile.write("\t".join(out_str))
                 outputfile.write("\n")
+            else:
+                outputfile.write("- ")
+                outputfile.write("\t".join(out_str))
+                outputfile.write("\n")
         else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
             outputfile.write("\t".join(out_str))
             outputfile.write("\n")
