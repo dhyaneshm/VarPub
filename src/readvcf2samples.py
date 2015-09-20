@@ -136,7 +136,7 @@ def main(argv):
             "ExAC_AF\tExAC_EAS\tExAC_NFE\tExAC_FIN\tExAC_SAS\tExAC_AFR\tExAC_AMR\tExAC_OTH\t" \
             "CADD\tmaxCADD\tpriPhCons\tGerpRS\tFATHMM\t" \
             "Mapability\tPromoter\tEnhancer\tRepeat\tPfam\t" \
-            "CPG\tClinVar\tGWAS\tMNP_FLAG\tExAC_FLAG\n")
+            "CPG\tClinVar\tGWAS\tMNP_FLAG\tExAC_FLAG\tSAMPLES\n")
 
 
     vcf_reader = vcf.Reader(open(args.vcf, 'r'))
@@ -154,6 +154,7 @@ def main(argv):
         current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
         current_exac_amr,current_exac_oth = 0.0,0.0
         exac_flag = "."
+        current_called = record.num_called
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -309,7 +310,7 @@ def main(argv):
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 str(fathmm_score), str(current_mapability), current_promoter, current_enhancer,
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
-                mnpflag, exac_flag]
+                mnpflag, exac_flag, current_called]
         out_str = [x or '.' for x in out_str]
 
         # filters ExAC ALL
