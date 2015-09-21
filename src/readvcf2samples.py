@@ -310,7 +310,7 @@ def main(argv):
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 str(fathmm_score), str(current_mapability), current_promoter, current_enhancer,
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
-                mnpflag, exac_flag, current_called]
+                mnpflag, exac_flag, str(current_called)]
         out_str = [x or '.' for x in out_str]
 
         # filters ExAC ALL
