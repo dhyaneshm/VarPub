@@ -154,7 +154,16 @@ def main(argv):
         current_exac_fin,current_exac_sas,current_exac_afr = 0.0,0.0,0.0
         current_exac_amr,current_exac_oth = 0.0,0.0
         exac_flag = "."
-        current_called = record.num_called
+
+        #current_called = record.num_called
+        current_called_hets = record.get_hets()
+        current_called_homalts = record.get_hom_alts()
+        current_called_homrefs = record.get_hom_refs()
+        current_called = str(record.num_called) + "," + \
+                str(current_called_hets) + "," + \
+                str(current_called_homalts) + "," + \
+                str(current_called_homrefs)
+
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
