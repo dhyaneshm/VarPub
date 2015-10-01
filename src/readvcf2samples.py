@@ -164,10 +164,10 @@ def main(argv):
         #        str(current_called_hets) + "|" + \
         #        str(current_called_homalts) + "|" + \
         #        str(current_called_homrefs)
-        het_samples = ','.join(str(v.sample) for v in record.get_hets())
-        alt_samples = ','.join(str(v.sample) for v in record.get_hom_alts())
-        current_called = het_samples + "," + alt_samples
-        current_called_list = current_called.split(',')
+        sample_list=[]
+        sample_list.append(str(v.sample) for v in record.get_hets())
+        sample_list.append(str(v.sample) for v in record.get_hom_alts())
+        current_called_list = filter(None, sample_list)
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
