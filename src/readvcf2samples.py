@@ -308,7 +308,7 @@ def main(argv):
         current_clinvar = getTabixVal(clin_tbx, current_chr, current_pos, current_ref, current_alt)
         current_gwas = getTabixVal(gwas_tbx, current_chr, current_pos, current_ref, current_alt)
         current_condel = getTabixValCondel(condel_tbx, current_chr, current_pos, current_ref, current_alt)
-        current_AF = record.INFO['AF']
+        current_AF = record.INFO['AF'][0]
 
         # RESCORE SCORES FOR PROTEIN TRUNCATING MUTATIONS
         (current_condel, current_sift, current_polyphen, fathmm_score) = adjust_scores(current_condel, current_sift, \
