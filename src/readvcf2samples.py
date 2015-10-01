@@ -333,10 +333,6 @@ def main(argv):
                     if( float(current_exac_af) <= float(args.exac_af_threshold) ):
                         outputfile.write(("\t".join(out_str)) + "\t" + i )
                         outputfile.write("\n")
-                        #else:
-                        #    outputfile.write("- ")
-                        #    outputfile.write("\t".join(out_str))
-                        #    outputfile.write("\n")
                     else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
                         outputfile.write("\t".join(out_str) + "\t" + i )
                         outputfile.write("\n")
