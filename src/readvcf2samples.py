@@ -327,19 +327,19 @@ def main(argv):
         out_str = [x or '.' for x in out_str]
 
         for i in current_called_list:
-            # filters ExAC ALL
-            if( 'PASS' in exac_flag ): # IF IT IS A PASS ExAC SITE - FILTER ON AF
-                if( float(current_exac_af) <= float(args.exac_af_threshold) ):
-                    outputfile.write(("\t".join(out_str)) + "\t" + i )
-                    outputfile.write("\n")
-                    #else:
-                    #    outputfile.write("- ")
-                    #    outputfile.write("\t".join(out_str))
-                    #    outputfile.write("\n")
-                else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
-                    outputfile.write("\t".join(out_str) + "\t" + i )
-                    outputfile.write("\n")
-
+            if(i is not None):
+                # filters ExAC ALL
+                if( 'PASS' in exac_flag ): # IF IT IS A PASS ExAC SITE - FILTER ON AF
+                    if( float(current_exac_af) <= float(args.exac_af_threshold) ):
+                        outputfile.write(("\t".join(out_str)) + "\t" + i )
+                        outputfile.write("\n")
+                        #else:
+                        #    outputfile.write("- ")
+                        #    outputfile.write("\t".join(out_str))
+                        #    outputfile.write("\n")
+                    else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
+                        outputfile.write("\t".join(out_str) + "\t" + i )
+                        outputfile.write("\n")
 
     outputfile.close()
 
