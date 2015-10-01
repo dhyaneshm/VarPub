@@ -164,10 +164,11 @@ def main(argv):
         #        str(current_called_hets) + "|" + \
         #        str(current_called_homalts) + "|" + \
         #        str(current_called_homrefs)
-        sample_list=[]
-        sample_list.append(str(v.sample) for v in record.get_hets())
-        sample_list.append(str(v.sample) for v in record.get_hom_alts())
-        current_called_list = filter(None, sample_list)
+        het_samples_list = [v.sample for v in record.get_hets()]
+        homalt_samples_list = [v.sample for v in record.get_hom_alts()]
+        current_called_list = list(set(het_samples_list)|set(homalt_samples_list))
+
+        current_called_list = filter(None, current_called_list)
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -333,9 +334,9 @@ def main(argv):
                     if( float(current_exac_af) <= float(args.exac_af_threshold) ):
                         outputfile.write(("\t".join(out_str)) + "\t" + i )
                         outputfile.write("\n")
-                    else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
-                        outputfile.write("\t".join(out_str) + "\t" + i )
-                        outputfile.write("\n")
+                else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
+                    outputfile.write("\t".join(out_str) + "\t" + i )
+                    outputfile.write("\n")
 
     outputfile.close()
 
