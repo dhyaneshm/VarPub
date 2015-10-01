@@ -156,14 +156,18 @@ def main(argv):
         exac_flag = "."
 
         #current_called = record.num_called
-        current_called_hets = record.get_hets()
-        current_called_homalts = record.get_hom_alts()
-        current_called_homrefs = record.get_hom_refs()
-        current_called = str(record.num_called) + "," + \
-                str(current_called_hets) + "," + \
-                str(current_called_homalts) + "," + \
-                str(current_called_homrefs)
+        #current_called_hets = record.get_hets()
+        #current_called_homalts = record.get_hom_alts()
+        #current_called_homrefs = record.get_hom_refs()
 
+        #current_called = str(record.num_called) + "|" + \
+        #        str(current_called_hets) + "|" + \
+        #        str(current_called_homalts) + "|" + \
+        #        str(current_called_homrefs)
+        het_samples = ','.join(str(v.sample) for v in record.get_hets())
+        alt_samples = ','.join(str(v.sample) for v in record.get_hom_alts())
+        current_called = het_samples + "," + alt_samples
+        current_called_list = current_called.split(',')
 
         # check if the variant is in ExAC annotated
         if any("ExAC" in s for s in record.INFO):
@@ -319,21 +323,23 @@ def main(argv):
                 cadd_phred, str(max(cadd_scores)), cadd_priPhCons, cadd_GerpRS,
                 str(fathmm_score), str(current_mapability), current_promoter, current_enhancer,
                 current_rmsk, current_pfam, current_cpg, current_clinvar, current_gwas,
-                mnpflag, exac_flag, str(current_called)]
+                mnpflag, exac_flag]
         out_str = [x or '.' for x in out_str]
 
-        # filters ExAC ALL
-        if( 'PASS' in exac_flag ): # IF IT IS A PASS ExAC SITE - FILTER ON AF
-            if( float(current_exac_af) <= float(args.exac_af_threshold) ):
-                outputfile.write("\t".join(out_str))
-                outputfile.write("\n")
-            #else:
-            #    outputfile.write("- ")
-            #    outputfile.write("\t".join(out_str))
-            #    outputfile.write("\n")
-        else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
-            outputfile.write("\t".join(out_str))
-            outputfile.write("\n")
+        for i in current_called_list:
+            # filters ExAC ALL
+            if( 'PASS' in exac_flag ): # IF IT IS A PASS ExAC SITE - FILTER ON AF
+                if( float(current_exac_af) <= float(args.exac_af_threshold) ):
+                    outputfile.write(("\t".join(out_str)) + "\t" + i )
+                    outputfile.write("\n")
+                    #else:
+                    #    outputfile.write("- ")
+                    #    outputfile.write("\t".join(out_str))
+                    #    outputfile.write("\n")
+                else: # THE EXAC CALL IS NOT RELIABLE THEREFORE CANNNOT FILTER ON AF
+                    outputfile.write("\t".join(out_str) + "\t" + i )
+                    outputfile.write("\n")
+
 
     outputfile.close()
 
