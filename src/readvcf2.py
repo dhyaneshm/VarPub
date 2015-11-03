@@ -284,7 +284,7 @@ def main(argv):
         # indel_str = "."
 
         # INSERT OTHER TABIX BASED ANNOTATORS BELOW
-        current_mapability = float(getTabixVal(map_tbx, current_chr, current_pos, current_ref, current_alt))
+        current_mapability = getTabixVal(map_tbx, current_chr, current_pos, current_ref, current_alt)
         current_pfam = getTabixVal(pfam_tbx, current_chr, current_pos, current_ref, current_alt)
         current_promoter = getTabixBool(prom_tbx, current_chr, current_pos, current_ref, current_alt)
         current_enhancer = getTabixBool(enh_tbx, current_chr, current_pos, current_ref, current_alt)
@@ -330,5 +330,3 @@ def main(argv):
 
 if __name__ == "__main__":
     main(sys.argv)
-
-
