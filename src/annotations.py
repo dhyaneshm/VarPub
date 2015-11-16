@@ -27,7 +27,7 @@ import pysam
 def getTabixVal(input_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = input_tbx.fetch(current_chr, current_pos-1, current_pos)
-    value = '.'
+    value = 'None'
     if data is not None:
         for row in data:
             row_info = row.split("\t")
@@ -67,7 +67,7 @@ def getfathmm(fathmm_tbx, current_chr, current_pos, current_ref, current_alt):
 def getTabixBool(input_tbx, current_chr, current_pos, current_ref, current_alt):
     #current_chr = current_chr.translate(None, 'chr')
     data = input_tbx.fetch(current_chr, current_pos-1, current_pos)
-    val = '.'
+    val = 'None'
 
     if data is not None:
         for row in data:
@@ -85,4 +85,3 @@ def adjust_scores(condel, sift, polyphen, fathmm, annotation):
         fathmm = 0.9999
 
     return condel, sift, polyphen, fathmm
-
